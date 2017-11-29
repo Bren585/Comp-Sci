@@ -31,18 +31,22 @@ def testPWinL(r,c):
         testFor = ['[O]', '[X]']
         nc = 0
         PWin = False
+        d = False
         for x in testFor:
             true = 0
             for z in range(0,4):
                 if board[r][c-z] == x:
                     true += 1
             if true == 3 :
+                PWin = True
                 for z in range(0,4):
                     if board[r][c-z] == x:
-                        nc =
-        return [PWin, nc]
+                        nc = (c-z)
+                if not board[r-1][nc] == '[ ]':
+                    d = True
+        return [PWin, nc, d]
     else:
-        return [False, 0]
+        return [False, 0, False]
 ### </AI BRAIN>  #############################################################
 ### <SETUP> ##################################################################
 def printRow(r):
