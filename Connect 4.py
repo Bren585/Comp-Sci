@@ -20,7 +20,31 @@ def PInput(prompt):
             return False
     else:
         return False
+ 
+### <AI BRAIN>  ##############################################################  
+def AInput():
+    guess = random.raandint(1,7)
+    return guess
 
+def testPWinL(r,c):
+    if c >= 3:
+        testFor = ['[O]', '[X]']
+        nc = 0
+        PWin = False
+        for x in testFor:
+            true = 0
+            for z in range(0,4):
+                if board[r][c-z] == x:
+                    true += 1
+            if true == 3 :
+                for z in range(0,4):
+                    if board[r][c-z] == x:
+                        nc =
+        return [PWin, nc]
+    else:
+        return [False, 0]
+### </AI BRAIN>  #############################################################
+### <SETUP> ##################################################################
 def printRow(r):
     r = board[r]
     print r[0], r[1], r[2], r[3], r[4], r[5], r[6]
@@ -49,6 +73,9 @@ def testTopOpen(c):
         return False
     else:
         return r - 1
+
+### </SETUP> ##################################################################
+### <TEST WIN> ################################################################
 
 def testWinLeft(r,c):
     if c >= 3:
@@ -131,6 +158,10 @@ def testWin():
             if testWinSq(r,c):
                 test = True
     return test
+    
+### </TEST WIN> ###############################################################
+### <GAME> ####################################################################
+
 print('--------CONNECT 4--------')
 print('   by Brendan Koetting   ')
 print('                         ')
@@ -152,8 +183,54 @@ else:
     print 'Not a valid gamemode'
     sys.exit()
 
+### <ONE PLAYER> ##############################################################
 if gamemode == 1:
     print "In Development. Try again later!"
+    play = True
+    turn = 0
+    player = 1
+    print "To place a disc, simply"
+    print "type the number row you" 
+    print "wish to place it. The rows"
+    print "count from left to right,"
+    print "starting at 1 and ending"
+    print "at 7. "
+    while play:
+        printBoard()
+        print 'Player %d' % (player)
+        if player == 1:
+            action = PInput('Your move: ')
+        if player == 2:
+            action = AInput()
+        if action == False:
+            print "Invalid move. Please try a number between 1 and 7."
+        else:
+            c = int(action) - 1
+            if 0 <= c <= 6:
+                if type(testTopOpen(c)) == int:
+                    r = testTopOpen(c)
+                    if player == 1:
+                        board[r][c] = '[O]'
+                        player = 2
+                    elif player == 2:
+                        board[r][c] = '[X]'
+                        player = 1
+                    if testWin():
+                        if player == 1:
+                            print "Player 2 Wins!"
+                            printBoard()
+                            break
+                        if player == 2:
+                            print "Player 1 Wins!"
+                            printBoard()
+                            break
+                else:
+                    print "Invalid move"
+            else:
+                print "Invalid move"
+
+### </ONE PLAYER> #############################################################
+### <TWO PLAYER> ##############################################################
 
 if gamemode == 2:
     play = True
@@ -195,6 +272,8 @@ if gamemode == 2:
                     print "Invalid move"
             else:
                 print "Invalid move"
+                
+### </TWO PLAYER> #############################################################
 
 if gamemode == 3:
     print('----------ABOUT----------')

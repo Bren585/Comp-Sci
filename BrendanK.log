@@ -1,0 +1,102 @@
+# IPython log file
+
+meme
+help
+#[Out]# Type help() for interactive help, or help(object) for help about object.
+help()
+import matplotlib.pyplot as plt
+a = randn(10000)
+plt.hist(a)
+#[Out]# (array([   11.,    82.,   400.,  1199.,  2376.,  2680.,  2026.,   944.,
+#[Out]#          254.,    28.]), array([-3.75496483, -3.05115956, -2.3473543 , -1.64354903, -0.93974377,
+#[Out]#        -0.2359385 ,  0.46786676,  1.17167203,  1.87547729,  2.57928256,
+#[Out]#         3.28308782]), <a list of 10 Patch objects>)
+plt.show()
+%cd "C:\Users\fhsplab\Desktop\Brendan's Python (Do NOT delete)"
+# Tue, 17 Oct 2017 11:43:03
+# Brendan Koetting 1.3.2 IPython log
+# Tue, 17 Oct 2017 11:43:22
+5+3
+#[Out]# 8
+# Tue, 17 Oct 2017 11:43:42
+2.+2
+#[Out]# 4.0
+# Tue, 17 Oct 2017 11:44:57
+#5a. int*int returns a in \
+#but int*float returns a float
+
+# Tue, 17 Oct 2017 11:45:47
+# 7b. int/int returns an int but int/float returns a float
+# Tue, 17 Oct 2017 11:45:58
+a=2
+# Tue, 17 Oct 2017 11:46:19
+# 8. Assignment
+# Tue, 17 Oct 2017 11:46:46
+student_age = 17
+# Tue, 17 Oct 2017 11:46:50
+a
+#[Out]# 2
+# Tue, 17 Oct 2017 11:46:54
+student_age
+#[Out]# 17
+# Tue, 17 Oct 2017 11:47:07
+a*2
+#[Out]# 4
+# Tue, 17 Oct 2017 11:47:11
+a**2
+#[Out]# 4
+# Tue, 17 Oct 2017 11:47:16
+a**3
+#[Out]# 8
+# Tue, 17 Oct 2017 11:47:30
+23**43
+#[Out]# 35834136918934220777541995677272642015423987712183913488967L
+# Tue, 17 Oct 2017 11:47:51
+abs(-7)
+#[Out]# 7
+# Tue, 17 Oct 2017 11:49:20
+def add_percent (total, percent):
+    add = percent*total
+    return total + add
+
+# Tue, 17 Oct 2017 11:49:53
+run add_percent(100, 50)
+# Tue, 17 Oct 2017 11:50:16
+run add_percent(100,50)
+# Tue, 17 Oct 2017 11:50:27
+add_percent(100,50)
+#[Out]# 5100
+# Tue, 17 Oct 2017 11:50:42
+def add_percent
+# Tue, 17 Oct 2017 11:51:00
+def add_percent(total, percent)
+# Tue, 17 Oct 2017 11:51:24
+def add_percent (total, percent):
+    add = percent/100*total
+    return total + add
+
+# Tue, 17 Oct 2017 11:51:36
+add_percent(100,50)
+#[Out]# 100
+# Tue, 17 Oct 2017 11:52:11
+def add_percent (total, percent):
+    add = percent*.01*total
+    return total + add
+
+# Tue, 17 Oct 2017 11:52:14
+add_percent(100,50)
+#[Out]# 150.0
+# Tue, 17 Oct 2017 11:53:36
+%run "c:\users\fhsplab\appdata\local\temp\tmp6lizyh.py"# Tue, 17 Oct 2017 11:53:42
+%run "c:\users\fhsplab\appdata\local\temp\tmpo1y6pv.py"# Tue, 17 Oct 2017 11:57:25
+%run "c:\users\fhsplab\appdata\local\temp\tmprp_rfy.py"# Tue, 17 Oct 2017 11:57:50
+add_percent(100,50)
+# Tue, 17 Oct 2017 11:59:28
+# 17a. Hypotenuse Test
+# Tue, 17 Oct 2017 11:59:36
+hyp(3,4)
+# Tue, 17 Oct 2017 11:59:39
+%run "c:\users\fhsplab\appdata\local\temp\tmpjrcdxz.py"# Tue, 17 Oct 2017 11:59:51
+hyp(3,4)
+# Tue, 17 Oct 2017 12:01:23
+%logstop
