@@ -27,11 +27,11 @@ def AInput():
     return guess
 
 def testPWinL(r,c):
+    testFor = ['[O]', '[X]']
+    nc = 0
+    PWin = False
+    d = False
     if c >= 3:
-        testFor = ['[O]', '[X]']
-        nc = 0
-        PWin = False
-        d = False
         for x in testFor:
             true = 0
             for z in range(0,4):
@@ -40,13 +40,13 @@ def testPWinL(r,c):
             if true == 3 :
                 PWin = True
                 for z in range(0,4):
-                    if board[r][c-z] == x:
+                    if board[r][c-z] != x:
                         nc = (c-z)
-                if not board[r-1][nc] == '[ ]':
+                if not board[r-1][nc] == '[ ]' or r == 0:
                     d = True
-        return [PWin, nc, d]
-    else:
-        return [False, 0, False]
+            if d:
+                return [PWin, nc, d]
+    return [PWin, nc, d]
 ### </AI BRAIN>  #############################################################
 ### <SETUP> ##################################################################
 def printRow(r):
