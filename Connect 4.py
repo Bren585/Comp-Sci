@@ -23,8 +23,11 @@ def PInput(prompt):
  
 ### <AI BRAIN>  ##############################################################  
 def AInput():
-    guess = random.raandint(1,7)
-    return guess
+    if type(testPWin()) == int:
+        return testPWin()
+    else:
+        guess = random.raandint(1,7)
+        return guess
 
 def testPWinL(r,c):
     testFor = ['[O]', '[X]']
@@ -42,11 +45,97 @@ def testPWinL(r,c):
                 for z in range(0,4):
                     if board[r][c-z] != x:
                         nc = (c-z)
-                if not board[r-1][nc] == '[ ]' or r == 0:
+                if not board[r-1][nc] == '[ ]' or r == 5:
                     d = True
             if d:
                 return [PWin, nc, d]
-    return [PWin, nc, d]
+    else:
+        return [PWin, nc, d]
+
+def testPWinDL(r,c):
+    testFor = ['[O]', '[X]']
+    nc = 0
+    PWin = False
+    d = False
+    if c >= 3 and r <= 2:
+        for x in testFor:
+            true = 0
+            for z in range(0,4):
+                if board[r-z][c-z] == x:
+                    true += 1
+            if true == 3 :
+                PWin = True
+                for z in range(0,4):
+                    if board[r-z][c-z] != x:
+                        nc = (c-z)
+                        nr = (r-z)
+                if not board[nr-1][nc] == '[ ]' or nr == 5:
+                    d = True
+            if d:
+                return [PWin, nc, d]
+    else:
+        return [PWin, nc, d]
+
+def testPWinDR(r,c):
+    testFor = ['[O]', '[X]']
+    nc = 0
+    PWin = False
+    d = False
+    if c <= 3 and r <= 2:
+        for x in testFor:
+            true = 0
+            for z in range(0,4):
+                if board[r-z][c+z] == x:
+                    true += 1
+            if true == 3 :
+                PWin = True
+                for z in range(0,4):
+                    if board[r-z][c+z] != x:
+                        nc = (c+z)
+                        nr = (r-z)
+                if not board[nr-1][nc] == '[ ]' or nr == 5:
+                    d = True
+            if d:
+                return [PWin, nc, d]
+    else:
+        return [PWin, nc, d]
+
+def testPWinD(r,c):
+    testFor = ['[O]', '[X]']
+    nc = 0
+    PWin = False
+    d = False
+    if r <= 2:
+        for x in testFor:
+            true = 0
+            for z in range(0,4):
+                if board[r-z][c] == x:
+                    true += 1
+            if true == 3:
+                PWin = True
+                d = True
+            if d:
+                return [PWin, nc, d]
+    else:
+        return [PWin, nc, d]
+
+def testPWinSq(r,c):
+    if testPWinL(r,c)[2]:
+        return testPWinL(r,c)[1]
+    elif testPWinDL(r,c)[2]:
+        return testPWinDL(r,c)[1]
+    elif testPWinD(r,c)[2]:
+        return testPWinD(r,c)[1]
+    elif testPWinDR(r,c)[2]:
+        return testPWinDR(r,c)[1]
+    else:
+        return False
+
+def testPWin():
+    for r in range(0,6):
+        for c in range(0,7):
+            if type(testPWinSq(r,c)) == int:
+                return testPWinSq(r,c)
 ### </AI BRAIN>  #############################################################
 ### <SETUP> ##################################################################
 def printRow(r):
