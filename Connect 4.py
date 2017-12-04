@@ -12,6 +12,9 @@ board = [
 
 def PInput(prompt):
     x = raw_input(prompt)
+    if x == 'test':
+        printTest()
+        sys.exit()
     if x.isdigit():
         x = int(x)
         if x >= 1 and x <= 7:
@@ -24,10 +27,12 @@ def PInput(prompt):
 ### <AI BRAIN>  ##############################################################  
 def AInput():
     if type(testPWin()) == int:
-        return testPWin()
+        return testPWin() + 1
     else:
-        guess = random.raandint(1,7)
-        return guess
+        guess = random.randint(0,6)
+        while type(testTopOpen(guess)) != int:
+            guess = random.randint(0,6)
+        return guess + 1
 
 def testPWinL(r,c):
     testFor = ['[O]', '[X]']
@@ -46,11 +51,9 @@ def testPWinL(r,c):
                     if board[r][c-z] != x:
                         nc = (c-z)
                 if not board[r-1][nc] == '[ ]' or r == 5:
-                    d = True
-            if d:
-                return [PWin, nc, d]
-    else:
-        return [PWin, nc, d]
+                    if r == 5 and board[r][nc] == '[ ]':
+                        d = True
+    return [PWin, nc, d]
 
 def testPWinDL(r,c):
     testFor = ['[O]', '[X]']
@@ -70,11 +73,9 @@ def testPWinDL(r,c):
                         nc = (c-z)
                         nr = (r-z)
                 if not board[nr-1][nc] == '[ ]' or nr == 5:
-                    d = True
-            if d:
-                return [PWin, nc, d]
-    else:
-        return [PWin, nc, d]
+                    if nr == 5 and board[nr][nc] == '[ ]':
+                        d = True
+    return [PWin, nc, d]
 
 def testPWinDR(r,c):
     testFor = ['[O]', '[X]']
@@ -94,11 +95,9 @@ def testPWinDR(r,c):
                         nc = (c+z)
                         nr = (r-z)
                 if not board[nr-1][nc] == '[ ]' or nr == 5:
-                    d = True
-            if d:
-                return [PWin, nc, d]
-    else:
-        return [PWin, nc, d]
+                    if nr == 5 and board[nr][nc] == '[ ]':
+                        d = True
+    return [PWin, nc, d]
 
 def testPWinD(r,c):
     testFor = ['[O]', '[X]']
@@ -113,11 +112,9 @@ def testPWinD(r,c):
                     true += 1
             if true == 3:
                 PWin = True
+            if board[r][c] == '[ ]' and PWin:
                 d = True
-            if d:
-                return [PWin, nc, d]
-    else:
-        return [PWin, nc, d]
+    return [PWin, nc, d]
 
 def testPWinSq(r,c):
     if testPWinL(r,c)[2]:
@@ -136,6 +133,14 @@ def testPWin():
         for c in range(0,7):
             if type(testPWinSq(r,c)) == int:
                 return testPWinSq(r,c)
+
+def printTest():
+    print testPWin()
+    print testPWinSq(testPWin())
+    print testPWinL(testPWin())
+    print testPWinDL(testPWin())
+    print testPWinD(testPWin())
+    print testPWinDR(testPWin())
 ### </AI BRAIN>  #############################################################
 ### <SETUP> ##################################################################
 def printRow(r):
@@ -160,9 +165,7 @@ def testTopOpen(c):
             r += 1
         else:
             test = False
-    if r == 6:
-        return 5
-    elif r == 0 and not testOpen(r,c):
+    if r == 0 and not testOpen(r,c):
         return False
     else:
         return r - 1
@@ -295,7 +298,7 @@ if gamemode == 1:
             action = PInput('Your move: ')
         if player == 2:
             action = AInput()
-        if action == False:
+        if action == False and type(action) != int:
             print "Invalid move. Please try a number between 1 and 7."
         else:
             c = int(action) - 1
@@ -319,8 +322,12 @@ if gamemode == 1:
                             break
                 else:
                     print "Invalid move"
+                    printTest()
+                    sys.exit()
             else:
                 print "Invalid move"
+                printTest()
+                sys.exit()
 
 ### </ONE PLAYER> #############################################################
 ### <TWO PLAYER> ##############################################################
