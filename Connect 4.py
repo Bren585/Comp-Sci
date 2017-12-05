@@ -50,11 +50,14 @@ def testPWinL(r,c):
                 for z in range(0,4):
                     if board[r][c-z] != x:
                         nc = (c-z)
-                if not board[r+1][nc] == '[ ]' or r == 5:
-                    if r == 5 and board[r][nc] == '[ ]':
+                if r == 5 and board[r][nc] == '[ ]':
                         d = True
-                    elif not board[r+1][nc] == '[ ]':
-                        d = True
+                else:
+                    try:
+                        if not board[r+1][nc] == '[ ]':
+                            d = True
+                    except IndexError:
+                        pass
     return [PWin, nc, d]
 
 def testPWinDL(r,c):
@@ -77,8 +80,12 @@ def testPWinDL(r,c):
                 if not board[nr+1][nc] == '[ ]' or nr == 5:
                     if nr == 5 and board[nr][nc] == '[ ]':
                         d = True
-                    elif not board[nr+1][nc] == '[ ]':
-                        d = True
+                    else:
+                        try:
+                            if not board[nr+1][nc] == '[ ]':
+                                d = True
+                        except IndexError:
+                            pass
     return [PWin, nc, d]
 
 def testPWinDR(r,c):
@@ -101,8 +108,12 @@ def testPWinDR(r,c):
                 if not board[nr+1][nc] == '[ ]' or nr == 5:
                     if nr == 5 and board[nr][nc] == '[ ]':
                         d = True
-                    elif not board[nr+1][nc] == '[ ]':
-                        d = True
+                    else:
+                        try:
+                            if not board[nr+1][nc] == '[ ]':
+                                d = True
+                        except IndexError:
+                            pass
     return [PWin, nc, d]
 
 def testPWinD(r,c):
@@ -125,8 +136,12 @@ def testPWinD(r,c):
                 if not board[nr+1][nc] == '[ ]' or nr == 5:
                     if nr == 5 and board[nr][nc] == '[ ]':
                         d = True
-                    elif not board[nr+1][nc] == '[ ]':
-                        d = True
+                    else:
+                        try:
+                            if not board[nr+1][nc] == '[ ]':
+                                d = True
+                        except IndexError:
+                            pass
     return [PWin, nc, d]
     
 def testPWinSq(r,c):
