@@ -50,8 +50,10 @@ def testPWinL(r,c):
                 for z in range(0,4):
                     if board[r][c-z] != x:
                         nc = (c-z)
-                if not board[r-1][nc] == '[ ]' or r == 5:
+                if not board[r+1][nc] == '[ ]' or r == 5:
                     if r == 5 and board[r][nc] == '[ ]':
+                        d = True
+                    elif not board[r+1][nc] == '[ ]':
                         d = True
     return [PWin, nc, d]
 
@@ -69,11 +71,13 @@ def testPWinDL(r,c):
             if true == 3 :
                 PWin = True
                 for z in range(0,4):
-                    if board[r-z][c-z] != x:
+                    if board[r+z][c-z] != x:
                         nc = (c-z)
-                        nr = (r-z)
-                if not board[nr-1][nc] == '[ ]' or nr == 5:
+                        nr = (r+z)
+                if not board[nr+1][nc] == '[ ]' or nr == 5:
                     if nr == 5 and board[nr][nc] == '[ ]':
+                        d = True
+                    elif not board[nr+1][nc] == '[ ]':
                         d = True
     return [PWin, nc, d]
 
@@ -91,11 +95,13 @@ def testPWinDR(r,c):
             if true == 3 :
                 PWin = True
                 for z in range(0,4):
-                    if board[r-z][c+z] != x:
+                    if board[r+z][c+z] != x:
                         nc = (c+z)
-                        nr = (r-z)
-                if not board[nr-1][nc] == '[ ]' or nr == 5:
+                        nr = (r+z)
+                if not board[nr+1][nc] == '[ ]' or nr == 5:
                     if nr == 5 and board[nr][nc] == '[ ]':
+                        d = True
+                    elif not board[nr+1][nc] == '[ ]':
                         d = True
     return [PWin, nc, d]
 
@@ -113,11 +119,13 @@ def testPWinD(r,c):
             if true == 3 :
                 PWin = True
                 for z in range(0,4):
-                    if board[r-z][c+z] != x:
-                        nc = (c)
-                        nr = (r-z)
-                if not board[nr-1][nc] == '[ ]' or nr == 5:
+                    if board[r+z][c] != x:
+                        nc = c
+                        nr = r+z
+                if not board[nr+1][nc] == '[ ]' or nr == 5:
                     if nr == 5 and board[nr][nc] == '[ ]':
+                        d = True
+                    elif not board[nr+1][nc] == '[ ]':
                         d = True
     return [PWin, nc, d]
     
