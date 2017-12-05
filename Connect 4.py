@@ -64,7 +64,7 @@ def testPWinDL(r,c):
         for x in testFor:
             true = 0
             for z in range(0,4):
-                if board[r-z][c-z] == x:
+                if board[r+z][c-z] == x:
                     true += 1
             if true == 3 :
                 PWin = True
@@ -86,7 +86,7 @@ def testPWinDR(r,c):
         for x in testFor:
             true = 0
             for z in range(0,4):
-                if board[r-z][c+z] == x:
+                if board[r+z][c+z] == x:
                     true += 1
             if true == 3 :
                 PWin = True
@@ -108,14 +108,19 @@ def testPWinD(r,c):
         for x in testFor:
             true = 0
             for z in range(0,4):
-                if board[r-z][c] == x:
+                if board[r+z][c] == x:
                     true += 1
-            if true == 3:
+            if true == 3 :
                 PWin = True
-            if board[r][c] == '[ ]' and PWin:
-                d = True
+                for z in range(0,4):
+                    if board[r-z][c+z] != x:
+                        nc = (c)
+                        nr = (r-z)
+                if not board[nr-1][nc] == '[ ]' or nr == 5:
+                    if nr == 5 and board[nr][nc] == '[ ]':
+                        d = True
     return [PWin, nc, d]
-
+    
 def testPWinSq(r,c):
     if testPWinL(r,c)[2]:
         return testPWinL(r,c)[1]
@@ -133,14 +138,15 @@ def testPWin():
         for c in range(0,7):
             if type(testPWinSq(r,c)) == int:
                 return testPWinSq(r,c)
+    return False
 
 def printTest():
     print testPWin()
-    print testPWinSq(testPWin())
-    print testPWinL(testPWin())
-    print testPWinDL(testPWin())
-    print testPWinD(testPWin())
-    print testPWinDR(testPWin())
+    print testPWinSq(testPWin(), testTopOpen(testPWin()))
+    print testPWinL(testPWin(), testTopOpen(testPWin()))
+    print testPWinDL(testPWin(), testTopOpen(testPWin()))
+    print testPWinD(testPWin(), testTopOpen(testPWin()))
+    print testPWinDR(testPWin(), testTopOpen(testPWin()))
 ### </AI BRAIN>  #############################################################
 ### <SETUP> ##################################################################
 def printRow(r):
