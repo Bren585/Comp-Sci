@@ -58,6 +58,8 @@ def testPWinL(r,c):
                             d = True
                     except IndexError:
                         pass
+                    if board[r][nc] != '[ ]':
+                        d = False
     return [PWin, nc, d]
 
 def testPWinDL(r,c):
@@ -86,6 +88,8 @@ def testPWinDL(r,c):
                                 d = True
                         except IndexError:
                             pass
+                    if board[nr][nc] != '[ ]':
+                        d = False
     return [PWin, nc, d]
 
 def testPWinDR(r,c):
@@ -114,6 +118,8 @@ def testPWinDR(r,c):
                                 d = True
                         except IndexError:
                             pass
+                    if board[nr][nc] != '[ ]':
+                        d = False
     return [PWin, nc, d]
 
 def testPWinD(r,c):
@@ -142,6 +148,8 @@ def testPWinD(r,c):
                                 d = True
                         except IndexError:
                             pass
+                    if board[nr][nc] != '[ ]':
+                        d = False
     return [PWin, nc, d]
     
 def testPWinSq(r,c):
@@ -310,7 +318,6 @@ else:
 
 ### <ONE PLAYER> ##############################################################
 if gamemode == 1:
-    print "In Development. Try again later!"
     play = True
     turn = 0
     player = 1
