@@ -27,12 +27,12 @@ def PInput(prompt):
 ### <AI BRAIN>  ##############################################################  
 def AInput():
     if type(testPWin()) == int:
-        return testPWin() + 1
-    else:
+        if type(testTopOpen(testPWin())) == int: 
+            return testPWin() + 1
+    guess = random.randint(0,6)
+    while type(testTopOpen(guess)) != int:
         guess = random.randint(0,6)
-        while type(testTopOpen(guess)) != int:
-            guess = random.randint(0,6)
-        return guess + 1
+    return guess + 1
 
 def testPWinL(r,c):
     testFor = ['[O]', '[X]']
