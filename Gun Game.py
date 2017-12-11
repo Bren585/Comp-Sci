@@ -18,17 +18,28 @@ victory = True ## Make False in final
 l = ['shoot', 'reload', 'shield']
 
 rLookup = [
-[['NN'],['D1'],['NN']],
-[['D0'],['R2'],['R0']],
-[['NN'],['R1'],['NN']]
+['N N','D 1','N N'],
+['D 0','R 2','R 0'],
+['N N','R 1','N N']
 ]
+
+rTrans = [], 'D', 'R', []
+pTrans = [player1], [player2], [player1, player2]
+
+def result(A,B):
+    r = rLookup[l.index(A)][l.index(B)]
+    if r != 'N N':
+        a,p = r.split()
+        a = rTrans.index(a)
+        for p in pTrans[int(p)]:
+            decr(a,p)
 
 def printRow(lst):
     if type(lst) == list:
-        p = ''
+        pr = ''
         for x in range(0, len(lst)):
-            p += str(lst[x])
-        print p 
+            pr += str(lst[x])
+        print pr 
 
 def printDisplay():
     for x in range(0,4):
@@ -52,17 +63,18 @@ def testEmpty(i,lst):
 def decr(i,lst):
     x = testEmpty(i,lst)
     if type(x) == int:
-        z = lst[i]
-        z[x] = '[ ]'
-        return z
-
-def result(A,B):
-    r = rLookup[l.index(A)][l.index(B)]
-    if r != 'NN':
-        a,p = r.split()
+        lst[i][-1 - x] = '[ ]'
+        
+def incr(i,lst): 
+    x = testEmpty(i,lst)
+    if type(x) == int and x != 0:
+        lst[i][-1 - (x-1)] = '[ ]'
+        
+def PInput(p):
+    test = raw_input('Player %s, Your move:')
 
 while not victory:
-    A1 = raw_input('Player 1, Your move: ')
+    A1 = PInput(1)
     for x in range(0,100):
         print ('Hiding response...')
     A2 = raw_input('Player 2, Your move: ')
