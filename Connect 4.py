@@ -79,17 +79,20 @@ def testPWinDL(r,c):
                     if board[r+z][c-z] != x:
                         nc = (c-z)
                         nr = (r+z)
-                if not board[nr+1][nc] == '[ ]' or nr == 5:
-                    if nr == 5 and board[nr][nc] == '[ ]':
-                        d = True
-                    else:
-                        try:
-                            if not board[nr+1][nc] == '[ ]':
-                                d = True
-                        except IndexError:
-                            pass
-                    if board[nr][nc] != '[ ]':
-                        d = False
+                try:
+                    if not board[nr+1][nc] == '[ ]' or nr == 5:
+                        if nr == 5 and board[nr][nc] == '[ ]':
+                            d = True
+                        else:
+                            try:
+                                if not board[nr+1][nc] == '[ ]':
+                                    d = True
+                            except IndexError:
+                                pass
+                        if board[nr][nc] != '[ ]':
+                            d = False
+                except IndexError:
+                    pass
     return [PWin, nc, d]
 
 def testPWinDR(r,c):
