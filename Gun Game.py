@@ -1,6 +1,25 @@
 import random
 import sys
 
+startUp = [
+'-----------Gun Game-----------',
+'      by Brendan Koetting     ',
+'Welcome to Gun Game. Gun Game,',
+'or GG for short, is a two     ',
+'player strategy game. Players ',
+'in GG mkae their actions      ',
+'simultaneusly in a simulated  ',
+'gun fight. Players choose     ',
+'between actions "reload,"     ',
+'"shoot," and "shield." First  ',
+'player to deal 4 damage wins. ',
+'Would you like to play? (y/n)'
+]
+for x in range(0,len(startUp)):
+    print(startUp[x])
+if raw_input() != 'y':
+    print 'Goodbye!'
+
 player1 = [
 raw_input('Who is Player 1? Name: '),
 ['HP:  ','[O]','[O]','[O]','[O]'],
@@ -15,15 +34,14 @@ raw_input('Who is Player 2? Name: '),
 ['SHLD:','[O]','[O]','[O]']
 ]
 
-victory = False
-l = ['shoot', 'reload', 'shield']
-
 rLookup = [
 ['N N','D 1','N N'],
 ['D 0','R 2','R 0'],
 ['N N','R 1','N N']
 ]
 
+victory = False
+l = ['shoot', 'reload', 'shield']
 rTrans = [], 'D', 'R', []
 pTrans = [[player1], [player2], [player1, player2]]
 
@@ -49,6 +67,7 @@ def printRow(lst):
         print pr 
 
 def printDisplay():
+    print ''
     for x in range(0,4):
         printRow(player1[x])
     print ''
@@ -101,6 +120,9 @@ def PInput(p):
         print 'Actions include only "shoot," "reload" and "shield."'
         return False
 
+print 'Ready?'
+print 'Draw!'
+
 while not victory:
     A1 = PInput(1)
     while type(A1) == bool:
@@ -123,7 +145,9 @@ while not victory:
     result(A1,A2)
     if not testEmpty(1, player1) and type(testEmpty(1, player1)) == bool:
         victory = True
+        print ''
         print '%s Wins!' % player2[0]
     if not testEmpty(1, player2) and type(testEmpty(1, player2)) == bool:
         victory = True
+        print ''
         print '%s Wins!' % player1[0]
