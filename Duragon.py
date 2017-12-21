@@ -25,6 +25,18 @@ fight = [
 ['[ ]','RETURN']
 ]
 
+item = [
+['[ ]','POTION'],
+['[ ]','BOMB'],
+['[ ]','RETURN']
+]
+
+spell = [
+['[ ]','GIGADYNE'],
+['[ ]','SHIELD'],
+['[ ]','RETURN']
+]
+
 mSel = []
 
 def dFormat(lst,i):
@@ -60,15 +72,15 @@ def displayF():
     
 def displayI():
     print 'Item:'
-    print cFormat(0)
-    print cFormat(1)
-    print cFormat(2)
+    print cFormat(item,0)
+    print cFormat(item,1)
+    print cFormat(item,2)
 
 def displayS():
     print 'Spell:'
-    print cFormat(0)
-    print cFormat(1)
-    print cFormat(2)
+    print cFormat(spell,0)
+    print cFormat(spell,1)
+    print cFormat(spell,2)
 
 def moveSel(lst,i):
     global mSel
@@ -103,21 +115,43 @@ def f():
         i = raw_input()
     if mSel == []:
         PSelect()
-        fight[mSel][0] = '[ ]'
     else:
-        exec ['s()','b()','PSelect()'][mSel]
+        fight[mSel][0] = '[ ]'
+        exec ['sd()','bw()','PSelect()'][mSel]
 
-def i():
+def it():
     global mSel
     mSel = []
     displayMain()
     displayI()
+    i = raw_input()
+    while i != '':
+        moveSel(item,i)
+        displayMain()
+        displayI()
+        i = raw_input()
+    if mSel == []:
+        PSelect()
+    else:
+        item[mSel][0] = '[ ]'
+        exec ['pt()','bm()','PSelect()'][mSel]
     
 def s():
     global mSel
     mSel = []
     displayMain()
     displayS()
+    i = raw_input()
+    while i != '':
+        moveSel(spell,i)
+        displayMain()
+        displayS()
+        i = raw_input()
+    if mSel == []:
+        PSelect()
+    else:
+        spell[mSel][0] = '[ ]'
+        exec ['sd()','bw()','PSelect()'][mSel]
 
 def PSelect():
     displayMain()
@@ -130,9 +164,9 @@ def PSelect():
         i = raw_input()
     if mSel == []:
         PSelect()
-        menu[mSel][0] = '[ ]'
     else:
-        exec ['f()','i()','s()'][mSel]
+        menu[mSel][0] = '[ ]'
+        exec ['f()','it()','s()'][mSel]
 
 def dCalc(a,d):
     r = a - d
