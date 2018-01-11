@@ -51,7 +51,23 @@ def round_corners_one_image(original_image, percent_of_side=.3):
     result = PIL.Image.new('RGBA', original_image.size, (0,0,0,0))
     result.paste(original_image, (0,0), mask=rounded_mask)
     return result
+
+def create_frame_one_image(original_image, percent_of_side=.3):
+    """ Rounds the corner of a PIL.Image
     
+    original_image must be a PIL.Image
+    Returns a new PIL.Image with rounded corners, where
+    0 < percent_of_side < 1
+    is the corner radius as a portion of the shorter dimension of original_image
+    """
+    #Get width and height
+    width, height = original_image.size
+
+    # Make the new bigger image, with frame color
+    result = PIL.Image.new('RGBA', (width+50, height+50), (161,72,130,255))
+    result.paste(original_image, (25,25))
+    return result
+
 def get_images(directory=None):
     """ Returns PIL.Image objects for all the images in directory.
     
@@ -78,12 +94,14 @@ def get_images(directory=None):
             pass # do nothing with errors tying to open non-images
     return image_list, file_list
 
-def round_corners_of_all_images(directory=None):
+def edit_all_images(edit,directory=None):
     """ Saves a modfied version of each image in directory.
     
     Uses current directory if no directory is specified. 
     Places images in subdirectory 'modified', creating it if it does not exist.
     New image files are of type PNG and have transparent rounded corners.
+    
+    Edits include 'custom', 'frame', and 'round'.
     """
     
     if directory == None:
@@ -105,9 +123,16 @@ def round_corners_of_all_images(directory=None):
         print(n)
         filename, filetype = os.path.splitext(file_list[n])
         
-        # Round the corners with default percent of radius
+        # Select Image
         curr_image = image_list[n]
-        new_image = round_corners_one_image(curr_image) 
+        
+        # Rounding current image
+        if edit == 'round':
+            new_image = round_corners_one_image(curr_image) 
+        
+        # Frame current image
+        if edit == 'frame':
+            new_image = create_frame_one_image(curr_image)
         
         # Save the altered image, suing PNG to retain transparency
         new_image_filename = os.path.join(new_directory, filename + '.png')

@@ -1,0 +1,36 @@
+# IPython log file
+
+%cd "C:\Users\fhsplab\Desktop\Comp-Sci\1_4_5_sourceFiles"
+%run "C:\Users\fhsplab\Desktop\Comp-Sci\1_4_5_sourceFiles\mask.py"
+%run "C:\Users\fhsplab\Desktop\Comp-Sci\1_4_5_sourceFiles\mask.py"
+round_corners_of_all_images(directory=None)
+round_corners_one_image
+#[Out]# <function round_corners_one_image at 0x0000000009D83B38>
+round_corners_one_image()
+round_corners_one_image(original_image, percent_of_side=.3)
+# Wed, 10 Jan 2018 13:29:34
+%cd "C:\Users\fhsplab\Desktop\Daniel Do's Folder\2nd Semester\1_4_5_sourceFiles"# Wed, 10 Jan 2018 13:29:41
+%run "C:\Users\fhsplab\Desktop\Daniel Do's Folder\2nd Semester\1_4_5_sourceFiles\mask.py"# Wed, 10 Jan 2018 13:30:20
+%cd "C:\Users\fhsplab\Desktop\Comp-Sci"# Wed, 10 Jan 2018 13:30:23
+%cd "C:\Users\fhsplab\Desktop\Daniel's Better Python"# Wed, 10 Jan 2018 13:30:29
+%cd "C:\Users\fhsplab\Desktop\Daniel Do's Folder\2nd Semester\1_4_5_sourceFiles"# Wed, 10 Jan 2018 13:31:06
+%cd "C:\Users\fhsplab\Desktop\Daniel's Better Python"# Wed, 10 Jan 2018 13:31:31
+%cd "C:\Users\fhsplab\Desktop\Daniel Do's Folder\Daniel's Better Python"# Wed, 10 Jan 2018 13:31:46
+%cd "C:\Users\fhsplab\Desktop\Daniel Do's Folder\2nd Semester\1_4_5_sourceFiles"# Wed, 10 Jan 2018 13:31:53
+%run "C:\Users\fhsplab\Desktop\Daniel Do's Folder\2nd Semester\1_4_5_sourceFiles\mask.py"# Wed, 10 Jan 2018 13:33:34
+%cd "C:\Users\fhsplab\Desktop\Daniel Do's Folder\2nd Semester\1_4_5_Images\1.4.5 Images"# Wed, 10 Jan 2018 13:34:35
+round_corners_of_all_images()
+# Wed, 10 Jan 2018 13:35:58
+round_corners_one_image(original_image, percent_of_side=.3)
+# Wed, 10 Jan 2018 13:36:47
+%run "C:\Users\fhsplab\Desktop\Daniel Do's Folder\2nd Semester\1_4_5_Images\1.4.5 Images\maskDaniel.py"# Wed, 10 Jan 2018 13:37:21
+%run "C:\Users\fhsplab\Desktop\Daniel Do's Folder\2nd Semester\1_4_5_Images\1.4.5 Images\maskDaniel.py"# Wed, 10 Jan 2018 13:37:27
+round_corners_one_image(original_image, percent_of_side=.3)
+# Wed, 10 Jan 2018 13:38:22
+round_corners_of_all_images
+#[Out]# <function __main__.round_corners_of_all_images>
+# Wed, 10 Jan 2018 13:38:39
+round_corners_of_all_images(directory=None):
+
+# Wed, 10 Jan 2018 13:38:41
+round_corners_of_all_images(directory=None)
