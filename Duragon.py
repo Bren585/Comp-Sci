@@ -2,15 +2,24 @@ import random
 
 E = [
 'Evil Dragon',
-['HP','000','000'],
-['MP','000','000']
+['HP','900','900'],
+['MP','500','500']
+['den','5'],
+['atk','10']
 ]
 
 name = []
 P = [
 str(name) + ' The Hero',
-['HP','000','000'],
-['MP','000','000']
+['HP','400','400'],
+['MP','100','100']
+['den','4'],
+['atk','8']
+]
+
+ail = [ ##Create Ailment Handler
+['E', []],
+['P', []]
 ]
 
 menu = [
@@ -101,7 +110,9 @@ def moveSel(lst,i):
                 mSel = 0
     if mSel != []:     
         lst[mSel][0] = '[*]'
-        
+
+##############################################################################
+
 def f():
     global mSel
     mSel = []
@@ -119,6 +130,16 @@ def f():
         fight[mSel][0] = '[ ]'
         exec ['sd()','bw()','PSelect()'][mSel]
 
+def sd():
+    dmg(P,E,3)
+
+def bw():
+    dmg(P,E,5)
+    decr(P,3,3)
+    ail[1][1].append([1,'incr(P,3,3)'])
+
+##############################################################################
+
 def it():
     global mSel
     mSel = []
@@ -135,7 +156,24 @@ def it():
     else:
         item[mSel][0] = '[ ]'
         exec ['pt()','bm()','PSelect()'][mSel]
-    
+        
+pt = True
+def pt():
+    global pt
+    if pt:
+        incr(P,1,100)
+        pt = False
+        ail[1][1].append([2,'pt = True'])
+    else:
+        PSelect()
+
+def bm():
+    dmg(10,E,0)
+    decr(E,3,3)
+    ail[0][1].append([3,'incr(E,3,3)'])
+
+##############################################################################
+
 def s():
     global mSel
     mSel = []
@@ -152,6 +190,8 @@ def s():
     else:
         spell[mSel][0] = '[ ]'
         exec ['sd()','bw()','PSelect()'][mSel]
+
+##############################################################################
 
 def PSelect():
     displayMain()
@@ -174,6 +214,9 @@ def dCalc(a,d):
         return r
     else:
         return 0
+
+def dmg(atk,den,mt):
+    decr(den, 1, dCalc(atk[4][1] + mt, den[3][1])*10)
 
 def decr(lst,i,x):
     a = lst[i][1]
