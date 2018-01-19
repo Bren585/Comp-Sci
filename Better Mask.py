@@ -78,7 +78,6 @@ def custom_edit_one_image(original_image, percent_of_side=.3):
     """
     #set the radius of the rounded corners
     width, height = original_image.size
-    radius = int(percent_of_side * min(width, height)) # radius in pixels
     
     ###
     #create a mask
@@ -91,26 +90,25 @@ def custom_edit_one_image(original_image, percent_of_side=.3):
     # Overwrite the RGBA values with A=255.
     # The 127 for RGB values was used merely for visualizing the mask
     
-    # Draw two rectangles to fill interior with opaqueness
-    drawing_layer.polygon([(radius,0),(width-radius,0),
-                            (width-radius,height),(radius,height)],
-                            fill=(127,0,127,255))
-    drawing_layer.polygon([(0,radius),(width,radius),
-                            (width,height-radius),(0,height-radius)],
+    # Draw Mask
+    drawing_layer.ellipse((((width-(width*4/5))/2),(height-(height*4/5)),(width*4/5),(height*4/5)), 
+                            fill=(0,127,127,255))
+    
+    drawing_layer.rectangle([(0,0),
+                            (width,height/2)],
+                            fill=(0,0,0,0))
+
+    drawing_layer.ellipse((((width-(width*7/10))/2),(height-(height*7/10)),(width*7/10),(height*7/10)), 
+                            fill=(0,0,0,0))
+    
+    drawing_layer.rectangle([((3/16.)*width,(1/16.)*height),((5/16.)*width,(7/16.)*height)],
                             fill=(127,0,127,255))
 
-    #Draw four filled circles of opaqueness
-    drawing_layer.ellipse((0,0, 2*radius, 2*radius), 
-                            fill=(0,127,127,255)) #top left
-    drawing_layer.ellipse((width-2*radius, 0, width,2*radius), 
-                            fill=(0,127,127,255)) #top right
-    drawing_layer.ellipse((0,height-2*radius,  2*radius,height), 
-                            fill=(0,127,127,255)) #bottom left
-    drawing_layer.ellipse((width-2*radius, height-2*radius, width, height), 
-                            fill=(0,127,127,255)) #bottom right
-                         
+    drawing_layer.rectangle([((11/16.)*width,(1/16.)*height),((13/16.)*width,(7/16.)*height)],
+                            fill=(0,0,255,255))
+
     # Uncomment the following line to show the mask
-    # plt.imshow(custom_mask)
+    plt.imshow(custom_mask)
     
     # Make the new image, starting with all transparent
     result = PIL.Image.new('RGBA', original_image.size, (0,0,0,0))
