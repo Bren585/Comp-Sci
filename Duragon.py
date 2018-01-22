@@ -3,7 +3,7 @@ import random
 E = [
 'Evil Dragon',
 ['HP','900','900'],
-['MP','500','500']
+['MP','500','500'],
 ['den','5'],
 ['atk','10']
 ]
@@ -12,12 +12,12 @@ name = []
 P = [
 str(name) + ' The Hero',
 ['HP','400','400'],
-['MP','100','100']
+['MP','100','100'],
 ['den','4'],
 ['atk','8']
 ]
 
-ail = [ ##Create Ailment Handler
+ail = [
 ['E', []],
 ['P', []]
 ]
@@ -47,6 +47,10 @@ spell = [
 ]
 
 mSel = []
+
+Turn = 0
+
+##############################################################################
 
 def dFormat(lst,i):
     d = lst[i]
@@ -90,6 +94,8 @@ def displayS():
     print cFormat(spell,0)
     print cFormat(spell,1)
     print cFormat(spell,2)
+
+##############################################################################
 
 def moveSel(lst,i):
     global mSel
@@ -167,10 +173,17 @@ def pt():
     else:
         PSelect()
 
+bm = True
 def bm():
-    dmg(10,E,0)
-    decr(E,3,3)
-    ail[0][1].append([3,'incr(E,3,3)'])
+    global bm
+    if bm:
+        dmg([[],[],[],[],[[],[10]]],E,0)
+        decr(E,3,3); decr(E,4,3)
+        bm = False
+        ail[0][1].append([3,'incr(E,3,3); incr(E,4,3)'])
+        ail[1][1].append([3,'bm = True'])
+    else:
+        PSelect()
 
 ##############################################################################
 
@@ -189,7 +202,48 @@ def s():
         PSelect()
     else:
         spell[mSel][0] = '[ ]'
-        exec ['sd()','bw()','PSelect()'][mSel]
+        exec ['gd()','sh()','PSelect()'][mSel]
+
+def gd():
+    if P[2][1] >= 15:
+        dmg(P,E,10)
+        decr(P,2,15)
+    else:
+        PSelect()
+
+sh = True
+def sh():
+    global sh
+    if sh and P[2][1] >= 10:
+        incr(P,3,7)
+        decr(P,2,10)
+        sh = False
+        ail[1][1].append([3,'decr(P,3,7); sh = True'])
+    else:
+        PSelect
+
+##############################################################################
+
+def cooldown(x):
+    l = len(ail[x][1])
+    for i in range(0,l):
+        turn, name = ail[x][1].pop(0)
+        turn += -1
+        if turn <= 0:
+            exec(name)
+        else:
+            ail[x][1].append([turn,name])
+
+def turnStart():
+    global Turn
+    Turn += 1
+    cooldown(0)
+    cooldown(1)
+    displayMain()
+    print ''
+    print '             TURN %d' % Turn
+    print '             START'
+    print ''
 
 ##############################################################################
 
@@ -208,6 +262,12 @@ def PSelect():
         menu[mSel][0] = '[ ]'
         exec ['f()','it()','s()'][mSel]
 
+##############################################################################
+
+##############################################################################
+
+##############################################################################
+
 def dCalc(a,d):
     r = a - d
     if r > 0:
@@ -216,7 +276,7 @@ def dCalc(a,d):
         return 0
 
 def dmg(atk,den,mt):
-    decr(den, 1, dCalc(atk[4][1] + mt, den[3][1])*10)
+    decr(den, 1, dCalc(int(atk[4][1]) + mt, int(den[3][1]))*10)
 
 def decr(lst,i,x):
     a = lst[i][1]
@@ -237,3 +297,15 @@ def incr(lst,i,x):
     while len(a) != 3:
         a = '0' + a
     lst[i][1] = a
+
+###############################################################################
+
+def Game():
+        print "What is the Hero's name?"
+        global name
+        name = raw_input()
+        turnStart()
+        raw_input()
+        PSelect()
+        #ESelect()
+        #turnEnd()
