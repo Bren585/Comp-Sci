@@ -8,9 +8,11 @@ E = [
 ['atk','10']
 ]
 
-name = []
+#print "What is the Hero's name?"
+#name = raw_input()
 P = [
-str(name) + ' The Hero',
+#str(name) + ' The Hero'
+[],
 ['HP','400','400'],
 ['MP','100','100'],
 ['den','4'],
@@ -264,6 +266,39 @@ def PSelect():
 
 ##############################################################################
 
+def ESelect():
+    HP, MP = int(E[1][1]), int(E[2][1])
+    if HP <= 200:
+        coin = random.choice(0,1)
+        exec ['dsp()','reg("w")'][coin] #desperation / regenerate (weak)
+        return
+    if MP <= 0:
+        exec 'str()' #struggle
+        return
+    if HP >= 700:
+        r = False
+        for x in ail[0]:
+            if x[1][:4] == 'decr':
+                r = True
+            elif x[1][:4] == 'incr':
+                r = False
+        if not r:
+            coin = random.choice(0,1)
+            exec 'buf(coin)' #sharpen claws
+            return
+    else:
+        prob = random.randint(0,100)
+        if 0 <= prob and prob <= 30:
+            exec 'clw()' #claw
+        if 31 <= prob and prob <= 50:
+            exec 'sma()' #smash
+        if 51 <= prob and prob <= 70:
+            exec 'fir()' #fireball
+        if 71 <= prob and prob <= 90:
+            exec 'wbl()' #windblast
+        if 91 <= prob and prob <= 100:
+            exec 'reg("s")' #regenerate (strong)
+
 ##############################################################################
 
 ##############################################################################
@@ -301,9 +336,6 @@ def incr(lst,i,x):
 ###############################################################################
 
 def Game():
-        print "What is the Hero's name?"
-        global name
-        name = raw_input()
         turnStart()
         raw_input()
         PSelect()
