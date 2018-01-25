@@ -8,11 +8,11 @@ E = [
 ['atk','10']
 ]
 
+name = []
 #print "What is the Hero's name?"
 #name = raw_input()
 P = [
-#str(name) + ' The Hero'
-[],
+str(name) + ' The Hero',
 ['HP','400','400'],
 ['MP','100','100'],
 ['den','4'],
@@ -207,7 +207,7 @@ def s():
         exec ['gd()','sh()','PSelect()'][mSel]
 
 def gd():
-    if P[2][1] >= 15:
+    if int(P[2][1]) >= 15:
         dmg(P,E,10)
         decr(P,2,15)
     else:
@@ -216,7 +216,7 @@ def gd():
 sh = True
 def sh():
     global sh
-    if sh and P[2][1] >= 10:
+    if sh and int(P[2][1]) >= 10:
         incr(P,3,7)
         decr(P,2,10)
         sh = False
@@ -299,10 +299,64 @@ def ESelect():
         if 91 <= prob and prob <= 100:
             exec 'reg("s")' #regenerate (strong)
 
-def displayEAct(act, ail = 'None'):
-    displayMain()
-    
+def clw():
+    dmg(E, P, 3)
+    displayEAct('Claw')
 
+def sma():
+    dmg(E, P, -1)
+    decr(P,3,3)
+    ail.append([2], 'incr(P,3,3)')
+    displayEAct('Smash', [name, 'defense', 'decreased'])
+
+def fir():
+    if int(E[2][1]) >= 15:
+        dmg(E,P,6)
+        decr(E,2,15)
+        displayEAct('Fireball')
+    else:
+        ESelect()
+
+def wbl():
+    if int(E[2][1]) >= 20:
+        dmg(E,P,8)
+        decr(E,2,20)
+        displayEAct('Windblast')
+    else:
+        ESelect()
+
+def reg(amount):
+    if int(E[2][1]) >= 25:
+        decr(E,2,25)
+        if amount == 'w':
+            incr(E,1,70)
+            displayEAct('Desperate Regeneration')
+        if amount == 's':
+            incr(E,1,150)
+            displayEAct('Regeneration')
+    else:
+        ESelect()
+
+def displayEAct(act, ail1 = 'None', ail2 = 'None'):
+    displayMain()
+    print 'Evil Dragon uses %s!' % (act)
+    print ''
+    if ail2 == 'None':
+        if ail1 == 'None':
+            print ''
+            print ''
+        else:
+            print ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!'
+            print ''
+    else:
+        if ail1 == 'None':
+            print ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!'
+            print ''
+        else:
+            print ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!'
+            print ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!'
+    raw_input()
+        
 ##############################################################################
 
 ##############################################################################
