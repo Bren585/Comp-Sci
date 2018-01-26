@@ -9,8 +9,8 @@ E = [
 ]
 
 name = []
-#print "What is the Hero's name?"
-#name = raw_input()
+print "What is the Hero's name?"
+name = raw_input()
 P = [
 str(name) + ' The Hero',
 ['HP','400','400'],
@@ -179,7 +179,7 @@ bm = True
 def bm():
     global bm
     if bm:
-        dmg([[],[],[],[],[[],[10]]],E,0)
+        dmg([[],[],[],[],[[],10]],E,0)
         decr(E,3,3); decr(E,4,3)
         bm = False
         ail[0][1].append([3,'incr(E,3,3); incr(E,4,3)'])
@@ -269,21 +269,19 @@ def PSelect():
 def ESelect():
     HP, MP = int(E[1][1]), int(E[2][1])
     if HP <= 200:
-        coin = random.choice(0,1)
+        coin = random.choice([0,1])
         exec ['dsp()','reg("w")'][coin] #desperation / regenerate (weak)
-        return
-    if MP <= 0:
-        exec 'str()' #struggle
         return
     if HP >= 700:
         r = False
-        for x in ail[0]:
-            if x[1][:4] == 'decr':
-                r = True
-            elif x[1][:4] == 'incr':
-                r = False
+        if len(ail[0][1]) >= 1:
+            for x in ail[0][1]:
+                if x[1][:4] == 'decr':
+                    r = True
+                elif x[1][:4] == 'incr':
+                    r = False
         if not r:
-            coin = random.choice(0,1)
+            coin = random.choice([0,1])
             exec 'buf(coin)' #sharpen claws
             return
     else:
@@ -299,6 +297,16 @@ def ESelect():
         if 91 <= prob and prob <= 100:
             exec 'reg("s")' #regenerate (strong)
 
+def buf(coin):
+    if coin == 0:
+        incr(E,3,3)
+        ail.append([3,'decr(E,3,3)'])
+        displayEAct('Sharpen Claws', [E[0], 'defense', 'increased'])
+    if coin == 1:
+        incr(E,4,3)
+        ail.append([3,'decr(E,4,3)'])
+        displayEAct('Sharpen Claws', [E[0], 'attack', 'increased'])
+
 def clw():
     dmg(E, P, 3)
     displayEAct('Claw')
@@ -306,7 +314,7 @@ def clw():
 def sma():
     dmg(E, P, -1)
     decr(P,3,3)
-    ail.append([2], 'incr(P,3,3)')
+    ail.append([2, 'incr(P,3,3)'])
     displayEAct('Smash', [name, 'defense', 'decreased'])
 
 def fir():
@@ -315,7 +323,7 @@ def fir():
         decr(E,2,15)
         displayEAct('Fireball')
     else:
-        ESelect()
+        exec 'stg()'
 
 def wbl():
     if int(E[2][1]) >= 20:
@@ -323,7 +331,7 @@ def wbl():
         decr(E,2,20)
         displayEAct('Windblast')
     else:
-        ESelect()
+        exec 'stg()'
 
 def reg(amount):
     if int(E[2][1]) >= 25:
@@ -335,7 +343,18 @@ def reg(amount):
             incr(E,1,150)
             displayEAct('Regeneration')
     else:
-        ESelect()
+        exec 'stg()'
+
+def dsp():
+    incr(E,4,2); incr(E,3,2)
+    ail.append([2,'decr(E,4,2); decr(E,3,2)'])
+    dmg(E, P, 2)
+    displayEAct('Desperation', [E[0], 'attack', 'increased'], [E[0], 'defense', 'increased'])
+
+def stg():
+    dmg(E, P, 2)
+    dmg(E, E, -1)
+    displayEAct('Struggle')
 
 def displayEAct(act, ail1 = 'None', ail2 = 'None'):
     displayMain()
@@ -358,6 +377,13 @@ def displayEAct(act, ail1 = 'None', ail2 = 'None'):
     raw_input()
         
 ##############################################################################
+
+def phaseEnd():
+    global vic
+    if int(P[1][1]) <= 0:
+        vic = True
+    if int(E[1][1]) <= 0:
+        vic = True
 
 ##############################################################################
 
@@ -392,10 +418,31 @@ def incr(lst,i,x):
     lst[i][1] = a
 
 ###############################################################################
-
+vic = False
 def Game():
+    global vic
+    vic = False
+    while not vic:
         turnStart()
         raw_input()
         PSelect()
-        #ESelect()
-        #turnEnd()
+        phaseEnd()
+        if not vic:
+            ESelect()
+            phaseEnd()
+    if P[1][1] != 0:
+        displayMain()
+        print ''
+        print '      CONGRATULATIONS, HERO!'
+        print '      YOU HAVE SLAIN THE DRAGON!'
+        print ''
+        raw_input()
+    else:
+        displayMain()
+        print ''
+        print '                GAME'
+        print '                OVER'
+        print ''
+        raw_input()
+
+Game()
