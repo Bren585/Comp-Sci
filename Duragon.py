@@ -13,8 +13,8 @@ print "What is the Hero's name?"
 name = raw_input()
 P = [
 str(name) + ' The Hero',
-['HP','400','400'],
-['MP','100','100'],
+['HP','600','600'],
+['MP','150','150'],
 ['den','4'],
 ['atk','8']
 ]
@@ -165,25 +165,25 @@ def it():
         item[mSel][0] = '[ ]'
         exec ['pt()','bm()','PSelect()'][mSel]
         
-pt = True
+ptC = True
 def pt():
-    global pt
-    if pt:
+    global ptC
+    if ptC:
         incr(P,1,100)
-        pt = False
-        ail[1][1].append([2,'pt = True'])
+        ptC = False
+        ail[1][1].append([2,'ptC = True'])
     else:
         PSelect()
 
-bm = True
+bmC = True
 def bm():
-    global bm
-    if bm:
+    global bmC
+    if bmC:
         dmg([[],[],[],[],[[],10]],E,0)
         decr(E,3,3); decr(E,4,3)
-        bm = False
+        bmC = False
         ail[0][1].append([3,'incr(E,3,3); incr(E,4,3)'])
-        ail[1][1].append([3,'bm = True'])
+        ail[1][1].append([3,'bmC = True'])
     else:
         PSelect()
 
@@ -213,14 +213,14 @@ def gd():
     else:
         PSelect()
 
-sh = True
+shC = True
 def sh():
-    global sh
-    if sh and int(P[2][1]) >= 10:
+    global shC
+    if shC and int(P[2][1]) >= 10:
         incr(P,3,7)
         decr(P,2,10)
-        sh = False
-        ail[1][1].append([3,'decr(P,3,7); sh = True'])
+        shC = False
+        ail[1][1].append([3,'decr(P,3,7); shC = True'])
     else:
         PSelect
 
@@ -273,12 +273,10 @@ def ESelect():
         exec ['dsp()','reg("w")'][coin] #desperation / regenerate (weak)
         return
     if HP >= 700:
-        r = False
+        r = True
         if len(ail[0][1]) >= 1:
             for x in ail[0][1]:
-                if x[1][:4] == 'decr':
-                    r = True
-                elif x[1][:4] == 'incr':
+                if x[1][:4] == 'incr':
                     r = False
         if not r:
             coin = random.choice([0,1])
