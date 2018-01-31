@@ -1,4 +1,30 @@
 import random
+import Tkinter
+
+root = Tkinter.Tk()
+
+disp = Tkinter.Canvas(root,width=400, height=300, background = '#FFFFFF')
+disp.grid(row=0, column=1)
+
+label = Tkinter.Label(root, text = 'Please Wait...')
+label.grid(row=1,column=1)
+
+b1 = Tkinter.Button(root, text = ' ', width=1, height=1)
+b1.grid(row=2, column=0)
+b2 = Tkinter.Button(root, text = ' ', width=1, height=1)
+b2.grid(row=3, column=0)
+b3 = Tkinter.Button(root, text = ' ', width=1, height=1)
+b3.grid(row=4, column=0)
+
+b1l = Tkinter.Label(root, text = '')
+b1l.grid(row=2, column=1)
+b2l = Tkinter.Label(root, text = '')
+b2l.grid(row=2, column=2)
+b3l = Tkinter.Label(root, text = '')
+b3l.grid(row=2, column=3)
+
+log = Tkinter.Text(root, width=20)
+log.grid(column=3,row=0,rowspan=5)
 
 E = [
 'Evil Dragon',
@@ -74,28 +100,28 @@ def displayMain():
     print ''
 
 def displayComm():
-    print 'Command?'
-    print cFormat(menu,0)
-    print cFormat(menu,1)
-    print cFormat(menu,2)
+    label.congfig(text = 'COMMAND?')
+    b1l.config(text = menu[0][1])
+    b2l.config(text = menu[1][1])
+    b3l.config(text = menu[2][1])
 
 def displayF():
-    print 'Fight:'
-    print cFormat(fight,0)
-    print cFormat(fight,1)
-    print cFormat(fight,2)
+    label.congfig(text = 'FIGHT:')
+    b1l.config(text = fight[0][1])
+    b2l.config(text = fight[1][1])
+    b3l.config(text = fight[2][1])
     
 def displayI():
-    print 'Item:'
-    print cFormat(item,0)
-    print cFormat(item,1)
-    print cFormat(item,2)
+    label.congfig(text = 'ITEM:')
+    b1l.config(text = item[0][1])
+    b2l.config(text = item[1][1])
+    b3l.config(text = item[2][1])
 
 def displayS():
-    print 'Spell:'
-    print cFormat(spell,0)
-    print cFormat(spell,1)
-    print cFormat(spell,2)
+    label.congfig(text = 'SPELL:')
+    b1l.config(text = spell[0][1])
+    b2l.config(text = spell[1][1])
+    b3l.config(text = spell[2][1])
 
 ##############################################################################
 
@@ -443,4 +469,4 @@ def Game():
         print ''
         raw_input()
 
-Game()
+root.mainloop()
