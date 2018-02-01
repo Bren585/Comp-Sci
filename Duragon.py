@@ -3,8 +3,11 @@ import Tkinter
 
 root = Tkinter.Tk()
 
-disp = Tkinter.Canvas(root,width=400, height=300, background = '#FFFFFF')
+disp = Tkinter.Canvas(root,width=400, height=300, background = '#808080')
 disp.grid(row=0, column=1)
+
+disp.create_rectangle(12,12,132,82, fill='#FFFFFF')
+disp.create_rectangle(268,218,388,288, fill='#FFFFFF')
 
 label = Tkinter.Label(root, text = 'Please Wait...')
 label.grid(row=1,column=1)
@@ -24,7 +27,12 @@ b3l = Tkinter.Label(root, text = '')
 b3l.grid(row=2, column=3)
 
 log = Tkinter.Text(root, width=20)
-log.grid(column=3,row=0,rowspan=5)
+log.grid(column=3,row=0,rowspan=10)
+
+def dFormat(lst,i):
+    d = lst[i]
+    d = d[0] + ': ' + str(d[1]) + '/' + str(d[2])
+    return d
 
 E = [
 'Evil Dragon',
@@ -32,6 +40,12 @@ E = [
 ['MP','500','500'],
 ['den','5'],
 ['atk','10']
+]
+
+ED = [
+disp.create_text(18,18, anchor='nw', text=E[0]),
+disp.create_text(18,36, anchor='nw', text=dFormat(E,1)),
+disp.create_text(18,54, anchor='nw', text=dFormat(E,2))
 ]
 
 name = []
@@ -43,6 +57,12 @@ str(name) + ' The Hero',
 ['MP','150','150'],
 ['den','4'],
 ['atk','8']
+]
+
+PD = [
+disp.create_text(274,224, anchor='nw', text=P[0]),
+disp.create_text(274,242, anchor='nw', text=dFormat(P,1)),
+disp.create_text(274,260, anchor='nw', text=dFormat(P,2))
 ]
 
 ail = [
@@ -79,14 +99,6 @@ mSel = []
 Turn = 0
 
 ##############################################################################
-
-def dFormat(lst,i):
-    d = lst[i]
-    d = d[0] + ': ' + str(d[1]) + '/' + str(d[2])
-    return d
-
-def cFormat(lst,i):
-    return str(lst[i][0]) + str(lst[i][1])
 
 def displayMain():
     print ''
