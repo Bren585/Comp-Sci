@@ -1,5 +1,7 @@
 import random
 import Tkinter
+import PIL.Image, PIL.ImageTk
+import os.path
 
 root = Tkinter.Tk()
 
@@ -8,6 +10,10 @@ disp.grid(row=0, column=1)
 
 disp.create_rectangle(12,12,132,82, fill='#FFFFFF')
 disp.create_rectangle(268,218,388,288, fill='#FFFFFF')
+
+EI = PIL.Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Dra.png'))
+PI = PIL.Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Her.png'))
+
 
 label = Tkinter.Label(root, text = 'Please Wait...')
 label.grid(row=1,column=1)
@@ -100,16 +106,11 @@ Turn = 0
 
 ##############################################################################
 
-def displayMain():
-    print ''
-    print ''
-    print ''
-    print ''
-    print ''
-    print E[0]+'          '+P[0]
-    print dFormat(E,1)+'          '+dFormat(P,1)
-    print dFormat(E,2)+'          '+dFormat(P,2)
-    print ''
+def dUpdate():
+    for i in range(0,len(ED)):
+        disp.itemconfig(ED[i], text=dFormat(E[i]))
+    for i in range(0,len(PD)):
+        disp.itemconfig(PD[i], text=dFormat(P[i]))
 
 def displayComm():
     label.congfig(text = 'COMMAND?')
@@ -162,12 +163,12 @@ def moveSel(lst,i):
 def f():
     global mSel
     mSel = []
-    displayMain()
+    dUpdate()
     displayF()
     i = raw_input()
     while i != '':
         moveSel(fight,i)
-        displayMain()
+        dUpdate()
         displayF()
         i = raw_input()
     if mSel == []:
@@ -189,12 +190,12 @@ def bw():
 def it():
     global mSel
     mSel = []
-    displayMain()
+    dUpdate()
     displayI()
     i = raw_input()
     while i != '':
         moveSel(item,i)
-        displayMain()
+        dUpdate()
         displayI()
         i = raw_input()
     if mSel == []:
@@ -230,12 +231,12 @@ def bm():
 def s():
     global mSel
     mSel = []
-    displayMain()
+    dUpdate()
     displayS()
     i = raw_input()
     while i != '':
         moveSel(spell,i)
-        displayMain()
+        dUpdate()
         displayS()
         i = raw_input()
     if mSel == []:
@@ -279,7 +280,7 @@ def turnStart():
     Turn += 1
     cooldown(0)
     cooldown(1)
-    displayMain()
+    dUpdate()
     print ''
     print '             TURN %d' % Turn
     print '             START'
@@ -288,12 +289,12 @@ def turnStart():
 ##############################################################################
 
 def PSelect():
-    displayMain()
+    dUpdate()
     displayComm()
     i = raw_input()
     while i != '':
         moveSel(menu,i)
-        displayMain()
+        dUpdate()
         displayComm()
         i = raw_input()
     if mSel == []:
@@ -393,7 +394,7 @@ def stg():
     displayEAct('Struggle')
 
 def displayEAct(act, ail1 = 'None', ail2 = 'None'):
-    displayMain()
+    dUpdate()
     print 'Evil Dragon uses %s!' % (act)
     print ''
     if ail2 == 'None':
@@ -467,14 +468,14 @@ def Game():
             ESelect()
             phaseEnd()
     if P[1][1] != 0:
-        displayMain()
+        dUpdate()
         print ''
         print '      CONGRATULATIONS, HERO!'
         print '      YOU HAVE SLAIN THE DRAGON!'
         print ''
         raw_input()
     else:
-        displayMain()
+        dUpdate()
         print ''
         print '                GAME'
         print '                OVER'
