@@ -11,18 +11,39 @@ disp.grid(row=0, column=1)
 disp.create_rectangle(12,12,132,82, fill='#FFFFFF')
 disp.create_rectangle(268,218,388,288, fill='#FFFFFF')
 
-EI = PIL.Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Dra.png'))
-PI = PIL.Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Her.png'))
+directory = os.path.dirname(os.path.abspath(__file__))
+Efilename = os.path.join(directory, 'Dra.png')
+EImg = PIL.Image.open(Efilename)
+Etkimg = PIL.ImageTk.PhotoImage(EImg)
+icon = disp.create_image((330,100), image = Etkimg)
 
+Pfilename = os.path.join(directory, 'Her.png')
+PImg = PIL.Image.open(Pfilename)
+Ptkimg = PIL.ImageTk.PhotoImage(PImg)
+icon = disp.create_image((75,240), image = Ptkimg)
 
 label = Tkinter.Label(root, text = 'Please Wait...')
 label.grid(row=1,column=1)
 
-b1 = Tkinter.Button(root, text = ' ', width=1, height=1)
+mSel = []
+
+def b1c():
+    global mSel
+    mSel = 0
+
+def b2c():
+    global mSel
+    mSel = 0
+
+def b3c():
+    global mSel
+    mSel = 0
+
+b1 = Tkinter.Button(root, text = ' ', width=1, height=1, command = b1c)
 b1.grid(row=2, column=0)
-b2 = Tkinter.Button(root, text = ' ', width=1, height=1)
+b2 = Tkinter.Button(root, text = ' ', width=1, height=1, command = b2c)
 b2.grid(row=3, column=0)
-b3 = Tkinter.Button(root, text = ' ', width=1, height=1)
+b3 = Tkinter.Button(root, text = ' ', width=1, height=1, command = b3c)
 b3.grid(row=4, column=0)
 
 b1l = Tkinter.Label(root, text = '')
@@ -34,6 +55,9 @@ b3l.grid(row=2, column=3)
 
 log = Tkinter.Text(root, width=20)
 log.grid(column=3,row=0,rowspan=10)
+
+def lg(text):
+    log.insert(text + '\n')
 
 def dFormat(lst,i):
     d = lst[i]
@@ -100,8 +124,6 @@ spell = [
 ['[ ]','RETURN']
 ]
 
-mSel = []
-
 Turn = 0
 
 ##############################################################################
@@ -113,50 +135,38 @@ def dUpdate():
         disp.itemconfig(PD[i], text=dFormat(P[i]))
 
 def displayComm():
-    label.congfig(text = 'COMMAND?')
+    label.config(text = 'COMMAND?')
     b1l.config(text = menu[0][1])
     b2l.config(text = menu[1][1])
     b3l.config(text = menu[2][1])
 
 def displayF():
-    label.congfig(text = 'FIGHT:')
+    label.config(text = 'FIGHT:')
     b1l.config(text = fight[0][1])
     b2l.config(text = fight[1][1])
     b3l.config(text = fight[2][1])
     
 def displayI():
-    label.congfig(text = 'ITEM:')
+    label.config(text = 'ITEM:')
     b1l.config(text = item[0][1])
     b2l.config(text = item[1][1])
     b3l.config(text = item[2][1])
 
 def displayS():
-    label.congfig(text = 'SPELL:')
+    label.config(text = 'SPELL:')
     b1l.config(text = spell[0][1])
     b2l.config(text = spell[1][1])
     b3l.config(text = spell[2][1])
 
 ##############################################################################
 
-def moveSel(lst,i):
+def wait():
     global mSel
-    if mSel == []:
-        if i == 'w':
-            mSel = 0
-        elif i == 's':
-            mSel = 2
-    else:
-        lst[mSel][0] = '[ ]'
-        if i == 'w':
-            mSel += -1
-            if mSel == -1:
-                mSel = 2
-        elif i == 's':
-            mSel += 1
-            if mSel == 3:
-                mSel = 0
-    if mSel != []:     
-        lst[mSel][0] = '[*]'
+    mSel = []
+    label.congfig(text = 'Press any button to Continue')
+    while mSel == []:
+        x = range[0,1]
+    
 
 ##############################################################################
 
@@ -165,16 +175,10 @@ def f():
     mSel = []
     dUpdate()
     displayF()
-    i = raw_input()
-    while i != '':
-        moveSel(fight,i)
+    while mSel == []:
         dUpdate()
         displayF()
-        i = raw_input()
-    if mSel == []:
-        PSelect()
     else:
-        fight[mSel][0] = '[ ]'
         exec ['sd()','bw()','PSelect()'][mSel]
 
 def sd():
@@ -192,16 +196,10 @@ def it():
     mSel = []
     dUpdate()
     displayI()
-    i = raw_input()
-    while i != '':
-        moveSel(item,i)
+    while mSel == []:
         dUpdate()
         displayI()
-        i = raw_input()
-    if mSel == []:
-        PSelect()
     else:
-        item[mSel][0] = '[ ]'
         exec ['pt()','bm()','PSelect()'][mSel]
         
 ptC = True
@@ -233,16 +231,10 @@ def s():
     mSel = []
     dUpdate()
     displayS()
-    i = raw_input()
-    while i != '':
-        moveSel(spell,i)
+    while mSel == []:
         dUpdate()
         displayS()
-        i = raw_input()
-    if mSel == []:
-        PSelect()
     else:
-        spell[mSel][0] = '[ ]'
         exec ['gd()','sh()','PSelect()'][mSel]
 
 def gd():
@@ -289,18 +281,14 @@ def turnStart():
 ##############################################################################
 
 def PSelect():
+    global mSel
+    mSel = []
     dUpdate()
     displayComm()
-    i = raw_input()
-    while i != '':
-        moveSel(menu,i)
+    while mSel == []:
         dUpdate()
         displayComm()
-        i = raw_input()
-    if mSel == []:
-        PSelect()
     else:
-        menu[mSel][0] = '[ ]'
         exec ['f()','it()','s()'][mSel]
 
 ##############################################################################
@@ -411,7 +399,7 @@ def displayEAct(act, ail1 = 'None', ail2 = 'None'):
         else:
             print ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!'
             print ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!'
-    raw_input()
+    wait()
         
 ##############################################################################
 
@@ -461,7 +449,7 @@ def Game():
     vic = False
     while not vic:
         turnStart()
-        raw_input()
+        wait()
         PSelect()
         phaseEnd()
         if not vic:
@@ -469,17 +457,12 @@ def Game():
             phaseEnd()
     if P[1][1] != 0:
         dUpdate()
-        print ''
-        print '      CONGRATULATIONS, HERO!'
-        print '      YOU HAVE SLAIN THE DRAGON!'
-        print ''
-        raw_input()
+        lg('Congratulations, Hero!')
+        lg('You defeated the Dragon!')
+        wait()
     else:
         dUpdate()
-        print ''
-        print '                GAME'
-        print '                OVER'
-        print ''
-        raw_input()
+        lg('GAME OVER')
+        wait()
 
 root.mainloop()
