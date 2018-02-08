@@ -11,7 +11,6 @@ def hundred_roll():
     plt.hist(y)
     plt.show()
 
-
 def dice_total():
     z = int(raw_input('Number of dice: '))
     y = 0

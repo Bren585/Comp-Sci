@@ -22,22 +22,34 @@ PImg = PIL.Image.open(Pfilename)
 Ptkimg = PIL.ImageTk.PhotoImage(PImg)
 icon = disp.create_image((75,240), image = Ptkimg)
 
-label = Tkinter.Label(root, text = 'Please Wait...')
+label = Tkinter.Label(root, text = 'Press Any Button to Begin')
 label.grid(row=1,column=1)
 
 mSel = []
 
 def b1c():
+    global gameStart
     global mSel
     mSel = 0
+    if gameStart == 0:
+        Game()
+        gameStart = 1
 
 def b2c():
+    global gameStart
     global mSel
     mSel = 0
+    if gameStart == 0:
+        Game()
+        gameStart = 1
 
 def b3c():
+    global gameStart
     global mSel
     mSel = 0
+    if gameStart == 0:
+        Game()
+        gameStart = 1
 
 b1 = Tkinter.Button(root, text = ' ', width=1, height=1, command = b1c)
 b1.grid(row=2, column=0)
@@ -57,7 +69,7 @@ log = Tkinter.Text(root, width=20)
 log.grid(column=3,row=0,rowspan=10)
 
 def lg(text):
-    log.insert(text + '\n')
+    log.insert(Tkinter.END, text + '\n')
 
 def dFormat(lst,i):
     d = lst[i]
@@ -130,9 +142,9 @@ Turn = 0
 
 def dUpdate():
     for i in range(0,len(ED)):
-        disp.itemconfig(ED[i], text=dFormat(E[i]))
+        disp.itemconfig(ED[i], text=dFormat(E,i))
     for i in range(0,len(PD)):
-        disp.itemconfig(PD[i], text=dFormat(P[i]))
+        disp.itemconfig(PD[i], text=dFormat(P,i))
 
 def displayComm():
     label.config(text = 'COMMAND?')
@@ -163,10 +175,13 @@ def displayS():
 def wait():
     global mSel
     mSel = []
-    label.congfig(text = 'Press any button to Continue')
-    while mSel == []:
-        x = range[0,1]
+    label.config(text = 'Press any button to Continue')
+    wait2()
     
+def wait2():
+    global mSel
+    if mSel == []:
+        root.after(10,wait2())  
 
 ##############################################################################
 
@@ -175,11 +190,8 @@ def f():
     mSel = []
     dUpdate()
     displayF()
-    while mSel == []:
-        dUpdate()
-        displayF()
-    else:
-        exec ['sd()','bw()','PSelect()'][mSel]
+    wait2()
+    exec ['sd()','bw()','PSelect()'][mSel]
 
 def sd():
     dmg(P,E,3)
@@ -196,11 +208,8 @@ def it():
     mSel = []
     dUpdate()
     displayI()
-    while mSel == []:
-        dUpdate()
-        displayI()
-    else:
-        exec ['pt()','bm()','PSelect()'][mSel]
+    wait2()
+    exec ['pt()','bm()','PSelect()'][mSel]
         
 ptC = True
 def pt():
@@ -231,11 +240,8 @@ def s():
     mSel = []
     dUpdate()
     displayS()
-    while mSel == []:
-        dUpdate()
-        displayS()
-    else:
-        exec ['gd()','sh()','PSelect()'][mSel]
+    wait2()
+    exec ['gd()','sh()','PSelect()'][mSel]
 
 def gd():
     if int(P[2][1]) >= 15:
@@ -253,7 +259,7 @@ def sh():
         shC = False
         ail[1][1].append([3,'decr(P,3,7); shC = True'])
     else:
-        PSelect
+        PSelect()
 
 ##############################################################################
 
@@ -273,10 +279,7 @@ def turnStart():
     cooldown(0)
     cooldown(1)
     dUpdate()
-    print ''
-    print '             TURN %d' % Turn
-    print '             START'
-    print ''
+    lg('TURN %s START' % Turn)
 
 ##############################################################################
 
@@ -285,11 +288,8 @@ def PSelect():
     mSel = []
     dUpdate()
     displayComm()
-    while mSel == []:
-        dUpdate()
-        displayComm()
-    else:
-        exec ['f()','it()','s()'][mSel]
+    wait2()
+    exec ['f()','it()','s()'][mSel]
 
 ##############################################################################
 
@@ -387,18 +387,15 @@ def displayEAct(act, ail1 = 'None', ail2 = 'None'):
     print ''
     if ail2 == 'None':
         if ail1 == 'None':
-            print ''
-            print ''
+            lg('')
         else:
-            print ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!'
-            print ''
+            lg(ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!')
     else:
         if ail1 == 'None':
-            print ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!'
-            print ''
+            lg(ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!')
         else:
-            print ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!'
-            print ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!'
+            lg(ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!')
+            lg(ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!')
     wait()
         
 ##############################################################################
@@ -420,7 +417,9 @@ def dCalc(a,d):
         return 0
 
 def dmg(atk,den,mt):
-    decr(den, 1, dCalc(int(atk[4][1]) + mt, int(den[3][1]))*10)
+    x = dCalc(int(atk[4][1]) + mt, int(den[3][1]))*10
+    decr(den, 1, x)
+    lg(den[0] + ' took %d damage!' % x)
 
 def decr(lst,i,x):
     a = lst[i][1]
@@ -465,4 +464,5 @@ def Game():
         lg('GAME OVER')
         wait()
 
+gameStart = 0
 root.mainloop()
