@@ -32,24 +32,24 @@ def b1c():
     global mSel
     mSel = 0
     if gameStart == 0:
-        Game()
         gameStart = 1
+
 
 def b2c():
     global gameStart
     global mSel
-    mSel = 0
+    mSel = 1
     if gameStart == 0:
-        Game()
         gameStart = 1
+
 
 def b3c():
     global gameStart
     global mSel
-    mSel = 0
+    mSel = 2
     if gameStart == 0:
-        Game()
         gameStart = 1
+
 
 b1 = Tkinter.Button(root, text = ' ', width=1, height=1, command = b1c)
 b1.grid(row=2, column=0)
@@ -136,14 +136,12 @@ spell = [
 ['[ ]','RETURN']
 ]
 
-Turn = 0
-
 ##############################################################################
 
 def dUpdate():
-    for i in range(0,len(ED)):
+    for i in range(1,len(ED)):
         disp.itemconfig(ED[i], text=dFormat(E,i))
-    for i in range(0,len(PD)):
+    for i in range(1,len(PD)):
         disp.itemconfig(PD[i], text=dFormat(P,i))
 
 def displayComm():
@@ -176,21 +174,12 @@ def wait():
     global mSel
     mSel = []
     label.config(text = 'Press any button to Continue')
-    wait2()
     
-def wait2():
-    global mSel
-    if mSel == []:
-        root.after(10,wait2())  
-
 ##############################################################################
 
 def f():
     global mSel
-    mSel = []
     dUpdate()
-    displayF()
-    wait2()
     exec ['sd()','bw()','PSelect()'][mSel]
 
 def sd():
@@ -205,10 +194,7 @@ def bw():
 
 def it():
     global mSel
-    mSel = []
     dUpdate()
-    displayI()
-    wait2()
     exec ['pt()','bm()','PSelect()'][mSel]
         
 ptC = True
@@ -237,10 +223,7 @@ def bm():
 
 def s():
     global mSel
-    mSel = []
     dUpdate()
-    displayS()
-    wait2()
     exec ['gd()','sh()','PSelect()'][mSel]
 
 def gd():
@@ -285,10 +268,7 @@ def turnStart():
 
 def PSelect():
     global mSel
-    mSel = []
     dUpdate()
-    displayComm()
-    wait2()
     exec ['f()','it()','s()'][mSel]
 
 ##############################################################################
@@ -443,26 +423,14 @@ def incr(lst,i,x):
 
 ###############################################################################
 vic = False
-def Game():
-    global vic
-    vic = False
-    while not vic:
-        turnStart()
-        wait()
-        PSelect()
-        phaseEnd()
-        if not vic:
-            ESelect()
-            phaseEnd()
-    if P[1][1] != 0:
-        dUpdate()
-        lg('Congratulations, Hero!')
-        lg('You defeated the Dragon!')
-        wait()
-    else:
-        dUpdate()
-        lg('GAME OVER')
-        wait()
-
 gameStart = 0
+Turn = 0
+act = -1
+phase = 0
+phases = ['turnStart()',]
+menu = 0
+menus = ['Wait()','displayComm()','displayF()','displayS()','displayI()']
+def GameHandler():
+    cry
+
 root.mainloop()
