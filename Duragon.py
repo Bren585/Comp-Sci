@@ -27,28 +27,21 @@ label.grid(row=1,column=1)
 
 mSel = []
 
+
 def b1c():
-    global gameStart
     global mSel
     mSel = 0
-    if gameStart == 0:
-        gameStart = 1
-
+    GameHandler()
 
 def b2c():
-    global gameStart
     global mSel
     mSel = 1
-    if gameStart == 0:
-        gameStart = 1
-
+    GameHandler()
 
 def b3c():
-    global gameStart
     global mSel
     mSel = 2
-    if gameStart == 0:
-        gameStart = 1
+    GameHandler()
 
 
 b1 = Tkinter.Button(root, text = ' ', width=1, height=1, command = b1c)
@@ -61,9 +54,9 @@ b3.grid(row=4, column=0)
 b1l = Tkinter.Label(root, text = '')
 b1l.grid(row=2, column=1)
 b2l = Tkinter.Label(root, text = '')
-b2l.grid(row=2, column=2)
+b2l.grid(row=3, column=1)
 b3l = Tkinter.Label(root, text = '')
-b3l.grid(row=2, column=3)
+b3l.grid(row=4, column=1)
 
 log = Tkinter.Text(root, width=20)
 log.grid(column=3,row=0,rowspan=10)
@@ -179,8 +172,11 @@ def wait():
 
 def f():
     global mSel
+    global p
     dUpdate()
-    exec ['sd()','bw()','PSelect()'][mSel]
+    p = 4
+    exec ['sd()','bw()','p = 1'][mSel]
+    GameHandler()
 
 def sd():
     dmg(P,E,3)
@@ -194,22 +190,28 @@ def bw():
 
 def it():
     global mSel
+    global p
     dUpdate()
-    exec ['pt()','bm()','PSelect()'][mSel]
+    p = 4
+    exec ['pt()','bm()','p = 1'][mSel]
+    GameHandler()
         
 ptC = True
 def pt():
     global ptC
+    global p
     if ptC:
         incr(P,1,100)
         ptC = False
         ail[1][1].append([2,'ptC = True'])
     else:
-        PSelect()
+        p = 1
+        GameHandler()
 
 bmC = True
 def bm():
     global bmC
+    global p
     if bmC:
         dmg([[],[],[],[],[[],10]],E,0)
         decr(E,3,3); decr(E,4,3)
@@ -217,32 +219,40 @@ def bm():
         ail[0][1].append([3,'incr(E,3,3); incr(E,4,3)'])
         ail[1][1].append([3,'bmC = True'])
     else:
-        PSelect()
+        p = 1
+        GameHandler()
 
 ##############################################################################
 
 def s():
     global mSel
+    global p
     dUpdate()
-    exec ['gd()','sh()','PSelect()'][mSel]
+    p = 4
+    exec ['gd()','sh()','p = 1'][mSel]
+    GameHandler()
 
 def gd():
+    global p
     if int(P[2][1]) >= 15:
         dmg(P,E,10)
         decr(P,2,15)
     else:
-        PSelect()
+        p = 1
+        GameHandler()
 
 shC = True
 def sh():
     global shC
+    global p
     if shC and int(P[2][1]) >= 10:
         incr(P,3,7)
         decr(P,2,10)
         shC = False
         ail[1][1].append([3,'decr(P,3,7); shC = True'])
     else:
-        PSelect()
+        p = 1
+        GameHandler()
 
 ##############################################################################
 
@@ -258,18 +268,29 @@ def cooldown(x):
 
 def turnStart():
     global Turn
+    global p
     Turn += 1
     cooldown(0)
     cooldown(1)
     dUpdate()
     lg('TURN %s START' % Turn)
+    p = 1
 
 ##############################################################################
 
 def PSelect():
     global mSel
+    global p
+    global phases
     dUpdate()
-    exec ['f()','it()','s()'][mSel]
+    p = 3
+    exec ['displayF()','displayI()','displayS()'][mSel]
+    phases[3] = ['f()', 'it()', 's()'][mSel]
+
+def PPhase1():
+    global p
+    displayComm()
+    p = 2
 
 ##############################################################################
 
@@ -362,6 +383,7 @@ def stg():
     displayEAct('Struggle')
 
 def displayEAct(act, ail1 = 'None', ail2 = 'None'):
+    global p
     dUpdate()
     print 'Evil Dragon uses %s!' % (act)
     print ''
@@ -376,16 +398,20 @@ def displayEAct(act, ail1 = 'None', ail2 = 'None'):
         else:
             lg(ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!')
             lg(ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!')
+    p += 1
     wait()
         
 ##############################################################################
 
 def phaseEnd():
     global vic
+    global p
+    p += 1
     if int(P[1][1]) <= 0:
         vic = True
     if int(E[1][1]) <= 0:
         vic = True
+    GameHandler()
 
 ##############################################################################
 
@@ -423,14 +449,26 @@ def incr(lst,i,x):
 
 ###############################################################################
 vic = False
-gameStart = 0
 Turn = 0
-act = -1
-phase = 0
-phases = ['turnStart()',]
-menu = 0
-menus = ['Wait()','displayComm()','displayF()','displayS()','displayI()']
+p = 0
+phases = ['turnStart()', 'PPhase1()', 'PSelect()', '', 'phaseEnd()', 'ESelect()', 'phaseEnd()', 'p=0;GameHandler()']
+
 def GameHandler():
-    cry
+    global mSel
+    dUpdate()
+    if not vic:
+        exec phases[p]
+    else:
+        victory()
+    mSel = 0
+
+def victory():
+    dUpdate()
+    if int(E[1][1]) <= 0:
+        lg('GAME OVER')
+        lg('May %s R.I.P.' % name)
+    elif int(P[1][1]) <= 0:
+        lg('CONGRATULATIONS!')
+        lg('You have defeated the dragon!')
 
 root.mainloop()
