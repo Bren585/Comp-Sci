@@ -58,11 +58,12 @@ b2l.grid(row=3, column=1)
 b3l = Tkinter.Label(root, text = '')
 b3l.grid(row=4, column=1)
 
-log = Tkinter.Text(root, width=20)
+log = Tkinter.Text(root, width=40, wrap = Tkinter.WORD)
 log.grid(column=3,row=0,rowspan=10)
 
 def lg(text):
     log.insert(Tkinter.END, text + '\n')
+    log.see(Tkinter.END)
 
 def dFormat(lst,i):
     d = lst[i]
@@ -165,8 +166,13 @@ def displayS():
 
 def wait():
     global mSel
+    global p
+    p += 1
     mSel = []
     label.config(text = 'Press any button to Continue')
+    b1l.config(text = '')
+    b2l.config(text = '')
+    b3l.config(text = '')
     
 ##############################################################################
 
@@ -175,7 +181,7 @@ def f():
     global p
     dUpdate()
     p = 4
-    exec ['sd()','bw()','p = 1'][mSel]
+    exec ['sd()','bw()','global p \np = 1'][mSel]
     GameHandler()
 
 def sd():
@@ -193,7 +199,7 @@ def it():
     global p
     dUpdate()
     p = 4
-    exec ['pt()','bm()','p = 1'][mSel]
+    exec ['pt()','bm()','global p \np = 1'][mSel]
     GameHandler()
         
 ptC = True
@@ -229,7 +235,7 @@ def s():
     global p
     dUpdate()
     p = 4
-    exec ['gd()','sh()','p = 1'][mSel]
+    exec ['gd()','sh()','global p \np = 1'][mSel]
     GameHandler()
 
 def gd():
@@ -256,7 +262,7 @@ def sh():
 
 ##############################################################################
 
-def cooldown(x):
+def cooldown(x): ## NOT SURE IF WORKING
     l = len(ail[x][1])
     for i in range(0,l):
         turn, name = ail[x][1].pop(0)
@@ -269,12 +275,14 @@ def cooldown(x):
 def turnStart():
     global Turn
     global p
+    lg('')
     Turn += 1
     cooldown(0)
     cooldown(1)
     dUpdate()
     lg('TURN %s START' % Turn)
     p = 1
+    GameHandler()
 
 ##############################################################################
 
@@ -299,29 +307,31 @@ def ESelect():
     if HP <= 200:
         coin = random.choice([0,1])
         exec ['dsp()','reg("w")'][coin] #desperation / regenerate (weak)
+        GameHandler()
         return
     if HP >= 700:
         r = True
         if len(ail[0][1]) >= 1:
-            for x in ail[0][1]:
+            for x in ail[0][1]: ## NOT WORKING
                 if x[1][:4] == 'incr':
                     r = False
-        if not r:
+        if r:
             coin = random.choice([0,1])
             exec 'buf(coin)' #sharpen claws
+            GameHandler()
             return
-    else:
-        prob = random.randint(0,100)
-        if 0 <= prob and prob <= 30:
-            exec 'clw()' #claw
-        if 31 <= prob and prob <= 50:
-            exec 'sma()' #smash
-        if 51 <= prob and prob <= 70:
-            exec 'fir()' #fireball
-        if 71 <= prob and prob <= 90:
-            exec 'wbl()' #windblast
-        if 91 <= prob and prob <= 100:
-            exec 'reg("s")' #regenerate (strong)
+    prob = random.randint(0,100)
+    if 0 <= prob and prob <= 30:
+        exec 'clw()' #claw
+    if 31 <= prob and prob <= 50:
+        exec 'sma()' #smash
+    if 51 <= prob and prob <= 70:
+        exec 'fir()' #fireball
+    if 71 <= prob and prob <= 90:
+        exec 'wbl()' #windblast
+    if 91 <= prob and prob <= 100:
+        exec 'reg("s")' #regenerate (strong)
+    GameHandler()
 
 def buf(coin):
     if coin == 0:
@@ -334,28 +344,29 @@ def buf(coin):
         displayEAct('Sharpen Claws', [E[0], 'attack', 'increased'])
 
 def clw():
-    dmg(E, P, 3)
     displayEAct('Claw')
+    dmg(E, P, 3)
+
 
 def sma():
+    displayEAct('Smash', [name, 'defense', 'decreased'])
     dmg(E, P, -1)
     decr(P,3,3)
     ail.append([2, 'incr(P,3,3)'])
-    displayEAct('Smash', [name, 'defense', 'decreased'])
 
 def fir():
     if int(E[2][1]) >= 15:
+        displayEAct('Fireball')
         dmg(E,P,6)
         decr(E,2,15)
-        displayEAct('Fireball')
     else:
         exec 'stg()'
 
 def wbl():
     if int(E[2][1]) >= 20:
+        displayEAct('Windblast')
         dmg(E,P,8)
         decr(E,2,20)
-        displayEAct('Windblast')
     else:
         exec 'stg()'
 
@@ -374,23 +385,22 @@ def reg(amount):
 def dsp():
     incr(E,4,2); incr(E,3,2)
     ail.append([2,'decr(E,4,2); decr(E,3,2)'])
-    dmg(E, P, 2)
     displayEAct('Desperation', [E[0], 'attack', 'increased'], [E[0], 'defense', 'increased'])
+    dmg(E, P, 2)
+
 
 def stg():
+    displayEAct('Struggle')
     dmg(E, P, 2)
     dmg(E, E, -1)
-    displayEAct('Struggle')
+
 
 def displayEAct(act, ail1 = 'None', ail2 = 'None'):
     global p
     dUpdate()
-    print 'Evil Dragon uses %s!' % (act)
-    print ''
+    lg('Evil Dragon uses %s!' % (act))
     if ail2 == 'None':
-        if ail1 == 'None':
-            lg('')
-        else:
+        if not ail1 == 'None':
             lg(ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!')
     else:
         if ail1 == 'None':
@@ -399,7 +409,6 @@ def displayEAct(act, ail1 = 'None', ail2 = 'None'):
             lg(ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!')
             lg(ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!')
     p += 1
-    wait()
         
 ##############################################################################
 
@@ -451,7 +460,7 @@ def incr(lst,i,x):
 vic = False
 Turn = 0
 p = 0
-phases = ['turnStart()', 'PPhase1()', 'PSelect()', '', 'phaseEnd()', 'ESelect()', 'phaseEnd()', 'p=0;GameHandler()']
+phases = ['turnStart()', 'PPhase1()', 'PSelect()', '', 'phaseEnd()', 'ESelect()', 'wait()', 'phaseEnd()', 'global p;p=0;GameHandler()']
 
 def GameHandler():
     global mSel
@@ -464,11 +473,10 @@ def GameHandler():
 
 def victory():
     dUpdate()
-    if int(E[1][1]) <= 0:
+    if int(P[1][1]) <= 0:
         lg('GAME OVER')
         lg('May %s R.I.P.' % name)
-    elif int(P[1][1]) <= 0:
+    elif int(E[1][1]) <= 0:
         lg('CONGRATULATIONS!')
         lg('You have defeated the dragon!')
-
 root.mainloop()
