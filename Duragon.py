@@ -185,9 +185,11 @@ def f():
     GameHandler()
 
 def sd():
+    displayPAct('Sword')
     dmg(P,E,3)
 
 def bw():
+    displayPAct('Bow',[P[0], 'defense', 'decreased'])
     dmg(P,E,5)
     decr(P,3,3)
     ail[1][1].append([1,'incr(P,3,3)'])
@@ -206,27 +208,31 @@ ptC = True
 def pt():
     global ptC
     global p
-    if ptC:
+    if ptC and int(P[1][1]) <= 500:
+        displayPAct('Potion', [P[0], 'HP', 'increased'])
         incr(P,1,100)
         ptC = False
-        ail[1][1].append([2,'ptC = True'])
+        ail[1][1].append([2,'global ptC \nptC = True'])
     else:
         p = 1
-        GameHandler()
+        lg('You can\'t use that now.')
+
 
 bmC = True
 def bm():
     global bmC
     global p
     if bmC:
+        displayPAct('Bomb', [E[0], 'defense', 'decreased'], [E[0], 'attack', 'decreased'])
         dmg([[],[],[],[],[[],10]],E,0)
         decr(E,3,3); decr(E,4,3)
         bmC = False
         ail[0][1].append([3,'incr(E,3,3); incr(E,4,3)'])
-        ail[1][1].append([3,'bmC = True'])
+        ail[1][1].append([3,'global bmC \nbmC = True'])
     else:
         p = 1
-        GameHandler()
+        lg('You can\'t use that now.')
+
 
 ##############################################################################
 
@@ -241,28 +247,30 @@ def s():
 def gd():
     global p
     if int(P[2][1]) >= 15:
+        displayPAct('Gigadyne')
         dmg(P,E,10)
         decr(P,2,15)
     else:
         p = 1
-        GameHandler()
+        lg('You can\'t use that now.')
 
 shC = True
 def sh():
     global shC
     global p
     if shC and int(P[2][1]) >= 10:
+        displayPAct('Shield', [P[0], 'defense', 'increased'])
         incr(P,3,7)
         decr(P,2,10)
         shC = False
-        ail[1][1].append([3,'decr(P,3,7); shC = True'])
+        ail[1][1].append([3,'decr(P,3,7); global shC \nshC = True'])
     else:
         p = 1
-        GameHandler()
+        lg('You can\'t use that now.')
 
 ##############################################################################
 
-def cooldown(x): ## NOT SURE IF WORKING
+def cooldown(x):
     l = len(ail[x][1])
     for i in range(0,l):
         turn, name = ail[x][1].pop(0)
@@ -300,6 +308,19 @@ def PPhase1():
     displayComm()
     p = 2
 
+def displayPAct(act, ail1 = 'None', ail2 = 'None'):
+    dUpdate()
+    lg(str(P[0]) + ' uses %s!' % (act))
+    if ail2 == 'None':
+        if not ail1 == 'None':
+            lg(ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!')
+    else:
+        if ail1 == 'None':
+            lg(ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!')
+        else:
+            lg(ail1[0] + '\'s ' + ail1[1] + ' was ' + ail1[2] + '!')
+            lg(ail2[0] + '\'s ' + ail2[1] + ' was ' + ail2[2] + '!')
+
 ##############################################################################
 
 def ESelect():
@@ -312,8 +333,8 @@ def ESelect():
     if HP >= 700:
         r = True
         if len(ail[0][1]) >= 1:
-            for x in ail[0][1]: ## NOT WORKING
-                if x[1][:4] == 'incr':
+            for x in ail[0][1]:
+                if x[1][:4] == 'decr':
                     r = False
         if r:
             coin = random.choice([0,1])
@@ -336,11 +357,11 @@ def ESelect():
 def buf(coin):
     if coin == 0:
         incr(E,3,3)
-        ail.append([3,'decr(E,3,3)'])
+        ail[0][1].append([3,'decr(E,3,3)'])
         displayEAct('Sharpen Claws', [E[0], 'defense', 'increased'])
     if coin == 1:
         incr(E,4,3)
-        ail.append([3,'decr(E,4,3)'])
+        ail[0][1].append([3,'decr(E,4,3)'])
         displayEAct('Sharpen Claws', [E[0], 'attack', 'increased'])
 
 def clw():
@@ -352,7 +373,7 @@ def sma():
     displayEAct('Smash', [name, 'defense', 'decreased'])
     dmg(E, P, -1)
     decr(P,3,3)
-    ail.append([2, 'incr(P,3,3)'])
+    ail[1][1].append([2, 'incr(P,3,3)'])
 
 def fir():
     if int(E[2][1]) >= 15:
@@ -384,7 +405,7 @@ def reg(amount):
 
 def dsp():
     incr(E,4,2); incr(E,3,2)
-    ail.append([2,'decr(E,4,2); decr(E,3,2)'])
+    ail[0][1].append([2,'decr(E,4,2); decr(E,3,2)'])
     displayEAct('Desperation', [E[0], 'attack', 'increased'], [E[0], 'defense', 'increased'])
     dmg(E, P, 2)
 
@@ -466,10 +487,11 @@ def GameHandler():
     global mSel
     dUpdate()
     if not vic:
+        #lg(phases[p])
         exec phases[p]
     else:
         victory()
-    mSel = 0
+    mSel = []
 
 def victory():
     dUpdate()
