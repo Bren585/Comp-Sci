@@ -6,7 +6,6 @@ root = Tkinter.Tk()
 ### VARIABLES ############################################################
 
 wordBank = ['HELLO', 'BOY', 'FRIEND', 'BALLOON', 'ENVELOPE','BURRITO','SAUCE','SOS','TACO','JAZZ','WEDNESDAY','DANCE','MEME','COOL','NUMBER','HANGMAN', 'CLOCK', 'COMPUTER', 'CHAIR', 'FLAG', 'MARKER', 'KEYBOARD', 'DOOR', 'WINDOW']
-final = False
 g = ''
 strikes = 0
 hidden_word = ''
@@ -29,35 +28,19 @@ def guess():
     global strikes
     global lst
     global show
-    if not win:
+    if not win and strikes <= 6:
         g = inp.get()
         inp.delete(0, Tkinter.END)
         test(g)
         lst.append(g)
         update()
-        if strikes >= 6:
-            wintest = True
-            for x in len(show):
-                if not x:
-                    wintest = False
-            if wintest:
-                win = True
     else:
-        inc.delete(1.0, Tkinter.END)
-        inc.insert('Game is Over')
         for x in range(0,len(show)):
             show[x] = True
-            update()
+        update()
 
 inpButn = Tkinter.Button(root, height = 1, width = 10, text = 'Enter', command = guess)
 inpButn.grid(row = 1, column = 0, rowspan = 2)
-
-gType = [
-Tkinter.Radiobutton(root, text = 'Letter', variable = final, value = False),
-Tkinter.Radiobutton(root, text = 'Final', variable = final, value = True)
-]
-gType[0].grid(row=1 ,column=2, sticky = 'w')
-gType[1].grid(row=2 ,column=2, sticky = 'w')
 
 inc = Tkinter.Text(root, width = 10, height = 10)
 inc.grid(row=0 ,column=0)
@@ -97,35 +80,43 @@ def test(g):
     global strikes
     global show
     if lst.count(g) == 0:
-        if final:
-            if hidden_word == g:
-                win = True
-                show = []
-                for x in range(0,len(show)):
-                    show.append(True)
-                update()
-            else:
-                wrng.append(g)
-                strikes += 1
+        if hidden_word.count(g) > 0 and len(g) == 1:
+            for x in range(0,len(hidden_word)):
+                if hidden_word[x] == g:
+                    show[x] = True
+        elif len(g) >= 2 and hidden_word == g:
+            show = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            update()
+            win = True
         else:
-            if hidden_word.count(g) > 0:
-                for x in range(0,len(hidden_word)):
-                    if hidden_word[x] == g:
-                        show[x] = True
-            else:
-                wrng.append(g)
-                strikes += 1
+            wrng.append(g)
+            strikes += 1
 
 def update():
+    global win
+    if strikes <= 6:
+        wintest = True
+        for x in range(0, len(show)):
+            if not x:
+                wintest = False
+        if wintest:
+            win = True
+    if win:
+        print 'hi'
+        inc.delete(1.0, Tkinter.END)
+        inc.insert(Tkinter.END, 'You win!\n')
+        inc.insert(Tkinter.END, 'Game is Over')
     wDisp()
     mDisp()
     iDisp()
+    
 
 def mDisp():
     global strikes
     global thanks
-    for x in range(0,strikes):
-        exec man[x]
+    if not win and strikes <= 6:
+        for x in range(0,strikes):
+            exec man[x]
 
 def wDisp():
     d = ''
