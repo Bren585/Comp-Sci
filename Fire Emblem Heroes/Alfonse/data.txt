@@ -1,0 +1,34 @@
+name:
+	Alfonse
+weapon type:
+	red sword
+movement:
+	infantry
+stats:
+	[0,0,0,0,0]
+modifiers:
+	[0,0,0,0,0]
+weapon:
+	Folkvangr
+	mt:
+		16
+	range:
+		1
+	eff:
+		null
+	skill:
+		[
+		START
+		HP <= 50
+		Atk + 5
+		]
+assist:
+	reposition
+special:
+	sol
+a skill:
+	death_blow (2)
+b skill:
+	null
+c skill:
+	spur_atk (3)

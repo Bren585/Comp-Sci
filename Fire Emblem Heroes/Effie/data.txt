@@ -1,0 +1,30 @@
+name:
+	Effie
+weapon type:
+	blue lance
+movement:
+	armored
+stats:
+	[0,0,0,0,0]
+modifiers:
+	[0,0,0,0,0]
+weapon:
+	Silver Lance+
+	mt:
+		15
+	range:
+		1
+	eff:
+		null
+	skill:
+		null
+assist:
+	pivot
+special:
+	ignis
+a skill:
+	fortress_defense (3)
+b skill:
+	wary_fighter (3)
+c skill:
+	null

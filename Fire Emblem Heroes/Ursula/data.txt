@@ -1,0 +1,30 @@
+name:
+	Ursula
+weapon type:
+	blue tome
+movement:
+	cavalier
+stats:
+	[0,0,0,0,0]
+modifiers:
+	[0,0,0,0,0]
+weapon:
+	Shine+
+	mt:
+		13
+	range:
+		2
+	eff:
+		null
+	skill:
+		null
+assist:
+	null
+special:
+	moonbow
+a skill:
+	darting_blow (3)
+b skill:
+	null
+c skill:
+	threaten_res (3)

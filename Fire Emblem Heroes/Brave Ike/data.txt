@@ -1,0 +1,35 @@
+name:
+	Brave Ike
+weapon type:
+	green axe
+movement:
+	infantry
+stats:
+	[0,0,0,0,0]
+modifiers:
+	[0,0,0,0,0]
+weapon:
+	Urvan
+	mt:
+		16
+	range:
+		1
+	eff:
+		null
+	skill:
+		special_accelerate
+		[
+		COMBAT
+		consecutive attack
+		DMG * .2
+		]
+assist:
+	reposition
+special:
+	aether
+a skill:
+	steady_breath
+b skill:
+	guard (3)
+c skill:
+	threaten_def (3)

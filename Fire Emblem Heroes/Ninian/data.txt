@@ -1,0 +1,35 @@
+name:
+	Ninian
+weapon type:
+	blue dragon
+movement:
+	infantry
+stats:
+	[0,0,0,0,0]
+modifiers:
+	[0,0,0,0,0]
+weapon:
+	Light Breath+
+	mt:
+		13
+	range:
+		1
+	eff:
+		null
+	skill:
+		[
+		INITIATE
+		COMBAT_END
+		ADJACENT_ALLY
+		Def,Res + 4
+		]
+assist:
+	sing
+special:
+	glimmer
+a skill:
+	death_blow (3)
+b skill:
+	renewal (3)
+c skill:
+	infantry_pulse (3)
