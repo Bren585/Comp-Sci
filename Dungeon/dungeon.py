@@ -1,7 +1,6 @@
 from Tkinter import *
 import PIL.Image, PIL.ImageTk
 import os.path
-import numpy
 
 root = Tk()
 directory = os.path.dirname(os.path.abspath(__file__))
