@@ -3,6 +3,7 @@ import PIL.Image, PIL.ImageTk
 import os.path
 
 root = Tk()
+root.wm_title('Dungeon Game')
 directory = os.path.dirname(os.path.abspath(__file__))
 
 ## DISPLAY #####################################################################
@@ -56,30 +57,15 @@ def read_floor(new = False):
                 newfloor.append(row)
         floor = newfloor
 
-def read_data(datatype,x,y):
+def read_data(y,x):
     fname = 'F' + str(fnum) + 'D.txt'
-    data = ''
-    rawdata = ''
-    read = False
-    line = ''
     with open(fname) as f:
         for i in f:
-            print i
-            for j in i:
-                print j
-                if j == datatype and read == False:
-                    read = True
-            if read == True:
-                for jp in i:
-                    line += jp
-                    data = line.split()
-                if int(data[0]) == x and int(data[1]) == y:
-                    rawdata = data[2], data[3]
-            if read == True and j == '/':
-                read = False
-    return rawdata
+            rx,ry,q,item = i.split()
+            if rx == str(x) and ry == str(y):
+                return q, item
+    return 'error','error'
 
-print read_data('2',1,1)
 
 ## EMPTY ####
 
@@ -147,8 +133,65 @@ create_map()
 
 ## STATUS DISPLAY ######################
 
-bar = Canvas(root, width = 128*5, height = 128, background = '#FFFFFF')
-bar.grid(row = 0, column = 6, columnspan = 5)
+Sdisp = Canvas(root, width = 128*5, height = 256, background = '#000000')
+Sdisp.grid(row = 0, column = 6, columnspan = 5, rowspan = 2)
+
+## HERO STATUS
+
+## INVENTORY #
+
+invBOX = Sdisp.create_rectangle(288, 32, 608, 224, fill = '#FFFFFF')
+selx = 300
+sely = 48
+selh = 16
+selw = 296
+invSEL = Sdisp.create_rectangle(selx, sely, selx + selw, sely + selh, fill = '#CCCCCC')
+invTEXT = Sdisp.create_text(304, 48, anchor = NW, text = 'INVENTORY:')
+
+def down(event):
+    if event.x >= 288 and event.x <= 608 and event.y >= 32 and event.y <= 224:
+        'yeet'
+
+def up(event):
+    'yote'
+
+Sdisp.bind('<Button-1>', down)
+Sdisp.bind('<ButtonRelease-1>', up)
+
+def sel_move(x = 300, y = 48):
+    global selx
+    global sely
+    selx = x
+    sely = y
+    Sdisp.coords(invSEL, selx, sely, selx + selw, sely + selh)
+
+sel_move(-100,-100)
+
+inv = []
+
+def write_inv():
+    text = 'INVENTORY:\n'
+    for i in inv:
+        test1 = len(i[0])
+        test2 = len(str(i[1]))
+        test3 = ''
+        for j in range(0,64-(test1+test2)):
+            test3 += '.'
+        text += str(i[0]) + str(test3) + str(i[1]) + '\n'
+    Sdisp.itemconfig(invTEXT, text = text)
+
+def store(item):
+    if len(inv) == 0:
+        inv.append([item[1],int(item[0])])
+    else:
+        for i in inv:
+            if i[0] == item[1]:
+                i[1] += int(item[0])
+            else:
+                inv.append([item[1],int(item[0])])
+            if i[1] == 0:
+                inv.remove(i)
+    write_inv()
 
 ## CONTROL PAD #########################
 
@@ -233,21 +276,22 @@ def Act():
     if test == '2':
         floor[ty][tx] = '3'
         create_map()
+        store(read_data(ty,tx))
 
 N = Button(root, width = 10, height = 4, text = 'North', command = moveN)
-N.grid(column = 7, row = 1, sticky = 's')
+N.grid(column = 7, row = 2, sticky = 's')
 
 E = Button(root, width = 10, height = 4, text = 'East', command = moveE)
-E.grid(column = 8, row = 2, sticky = 'w')
+E.grid(column = 8, row = 3, sticky = 'w')
 
 S = Button(root, width = 10, height = 4, text = 'South', command = moveS)
-S.grid(column = 7, row = 3, sticky = 'n')
+S.grid(column = 7, row = 4, sticky = 'n')
 
 W = Button(root, width = 10, height = 4, text = 'West', command = moveW)
-W.grid(column = 6, row = 2, sticky = 'e')
+W.grid(column = 6, row = 3, sticky = 'e')
 
 A = Button(root, width = 10, height = 4, text = 'Act', command = Act)
-A.grid(column = 7, row = 2)
+A.grid(column = 7, row = 3)
 
 ## WHATEVER ############################
 

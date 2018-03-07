@@ -1,3 +1,2 @@
-2
-5 5 1 potion
-/2
+5 5 1 Potion
+0 0 0 nothing
