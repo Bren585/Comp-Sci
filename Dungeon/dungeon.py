@@ -11,7 +11,7 @@ directory = os.path.dirname(os.path.abspath(__file__))
 
 ## MAP ################################
 
-field = Canvas(root,width = 128*5, height = 128*5, background = '#000000')
+field = Canvas(root,width = 128*5, height = 128*5, background = '#000000', takefocus = True)
 field.grid(row=0,column=0,rowspan = 5, columnspan = 5)
 
 lkup = ['null','create_tile','create_chest0','create_chest1']
@@ -292,6 +292,19 @@ W.grid(column = 6, row = 3, sticky = 'e')
 
 A = Button(root, width = 10, height = 4, text = 'Act', command = Act)
 A.grid(column = 7, row = 3)
+field.bind('<Return>', Act)
+
+def key_pressed(event):
+    k = event.char
+    if k == 'w':
+        moveN()
+    if k == 'a':
+        moveW()
+    if k == 's':
+        moveS()
+    if k == 'd':
+        moveE()
+field.bind('<Key>', key_pressed)
 
 ## WHATEVER ############################
 
