@@ -11,8 +11,8 @@ directory = os.path.dirname(os.path.abspath(__file__))
 
 ## MAP ################################
 
-field = Canvas(root,width = 128*5, height = 128*5, background = '#000000', takefocus = True)
-field.grid(row=0,column=0,rowspan = 5, columnspan = 5)
+field = Canvas(root,width = 128*7, height = 128*5, background = '#000000', takefocus = True)
+field.grid(row=0,column=0)
 
 lkup = ['null','create_tile','create_chest0','create_chest1']
 
@@ -33,15 +33,15 @@ heroD = 'N'
 
 def dirCheck():
     if heroD == 'N':
-        return [1,0]
+        return [-1,0]
     if heroD == 'E':
         return [0,1]
     if heroD == 'S':
-        return [-1,0]
+        return [1,0]
     if heroD == 'W':
         return [0,-1]
 
-p_x, p_y = 2,2
+p_x, p_y = 0,0
 
 def read_floor(new = False):
     global floor
@@ -123,62 +123,91 @@ def create_map():
         for x in range(-2,3):
             if x == 0 and y == 0:
                 create_hero(heroD,heroS)
-            else:
-                temp1 = floor[p_y+y][p_x+x]
-                temp2 = lkup[int(temp1)]
-                temp3 = temp2 + '(' + str(x+2) + ',' + str(y+2) + ')'
-                exec temp3
+            elif p_y+y >= 0 and p_x+x >= 0:
+                try:
+                    temp1 = floor[p_y+y][p_x+x]
+                    temp2 = lkup[int(temp1)]
+                    temp3 = temp2 + '(' + str(x+2) + ',' + str(y+2) + ')'
+                    exec temp3
+                except IndexError:
+                    null(0,0)
 
 create_map()
 
 ## STATUS DISPLAY ######################
 
-Sdisp = Canvas(root, width = 128*5, height = 256, background = '#000000')
-Sdisp.grid(row = 0, column = 6, columnspan = 5, rowspan = 2)
+Sdisp = field.create_rectangle(128*5,0,128*7,128*5, fill = '#888888')
 
 ## HERO STATUS
 
 ## INVENTORY #
 
-invBOX = Sdisp.create_rectangle(288, 32, 608, 224, fill = '#FFFFFF')
-selx = 300
-sely = 48
+menu = False
+def menu_mode():
+    global menu
+    if menu:
+        menu = False
+        sel_move(-100,-100)
+    else:
+        menu = True
+        if len(inv) > 0:
+            sel_move(y = (sel*16)+256+48)
+
+sel = 1
+
+def mUp():
+    global sel
+    sel -= 1
+    if sel <= 0:
+        sel = len(inv)
+    if len(inv) > 0:
+        sel_move(y = (sel*16)+256+48)
+
+def mDown():
+    global sel
+    sel += 1
+    if sel > len(inv):
+        sel = 1
+    if len(inv) > 0:
+        sel_move(y = (sel*16)+256+48)
+
+def mSel():
+    use(inv[sel-1])
+    menu_mode()
+    write_inv()
+
+def use(thing):
+    item = thing[0]
+    q = thing[1]
+
+invBOX = field.create_rectangle(128*5+32,256+32,128*7-32,128*5-32, fill = '#FFFFFF')
+selx = 128*5+44
+sely = 256+48
 selh = 16
-selw = 296
-invSEL = Sdisp.create_rectangle(selx, sely, selx + selw, sely + selh, fill = '#CCCCCC')
-invTEXT = Sdisp.create_text(304, 48, anchor = NW, text = 'INVENTORY:')
+selw = 128+40
+invSEL = field.create_rectangle(selx, sely, selx + selw, sely + selh, fill = '#CCCCCC')
+invTEXT = field.create_text(128*5+48, 256+48, anchor = NW, text = 'INVENTORY:')
+invQ = field.create_text(128*7-48, 256+48, anchor = NE, text = '\n')
 
-def down(event):
-    if event.x >= 288 and event.x <= 608 and event.y >= 32 and event.y <= 224:
-        'yeet'
-
-def up(event):
-    'yote'
-
-Sdisp.bind('<Button-1>', down)
-Sdisp.bind('<ButtonRelease-1>', up)
-
-def sel_move(x = 300, y = 48):
+def sel_move(x = 128*5+44, y = 256+48):
     global selx
     global sely
     selx = x
     sely = y
-    Sdisp.coords(invSEL, selx, sely, selx + selw, sely + selh)
+    field.coords(invSEL, selx, sely, selx + selw, sely + selh)
 
 sel_move(-100,-100)
 
 inv = []
 
 def write_inv():
-    text = 'INVENTORY:\n'
+    text1 = 'INVENTORY:\n'
+    text2 = '\n'
     for i in inv:
-        test1 = len(i[0])
-        test2 = len(str(i[1]))
-        test3 = ''
-        for j in range(0,64-(test1+test2)):
-            test3 += '.'
-        text += str(i[0]) + str(test3) + str(i[1]) + '\n'
-    Sdisp.itemconfig(invTEXT, text = text)
+        text1 += i[0] + '\n'
+        text2 += str(i[1]) + '\n'
+    field.itemconfig(invTEXT, text = text1)
+    field.itemconfig(invQ, text = text2)
 
 def store(item):
     if len(inv) == 0:
@@ -187,10 +216,10 @@ def store(item):
         for i in inv:
             if i[0] == item[1]:
                 i[1] += int(item[0])
-            else:
-                inv.append([item[1],int(item[0])])
+                return
             if i[1] == 0:
                 inv.remove(i)
+        inv.append([item[1],int(item[0])])
     write_inv()
 
 ## CONTROL PAD #########################
@@ -202,12 +231,15 @@ def moveN():
     global heroSP
     heroD = 'N'
     if p_y > 0:
-        test = floor[p_y - 1][p_x]
-        if test == '1':
-            heroS = heroSP
-            heroSPFlip()
-            p_y += -1
-        else:
+        try:
+            test = floor[p_y - 1][p_x]
+            if test == '1':
+                heroS = heroSP
+                heroSPFlip()
+                p_y += -1
+            else:
+                heroS = 0
+        except IndexError:
             heroS = 0
     else:
         heroS = 0
@@ -220,12 +252,15 @@ def moveE():
     global heroSP
     heroD = 'E'
     if p_x < len(floor[0]):
-        test = floor[p_y][p_x + 1]
-        if test == '1':
-            heroS = heroSP
-            heroSPFlip()
-            p_x += 1
-        else:
+        try:
+            test = floor[p_y][p_x + 1]
+            if test == '1':
+                heroS = heroSP
+                heroSPFlip()
+                p_x += 1
+            else:
+                heroS = 0
+        except IndexError:
             heroS = 0
     else:
         heroS = 0
@@ -238,12 +273,15 @@ def moveS():
     global heroSP
     heroD = 'S'
     if p_y < len(floor):
-        test = floor[p_y + 1][p_x]
-        if test == '1':
-            heroS = heroSP
-            heroSPFlip()
-            p_y += 1
-        else:
+        try:
+            test = floor[p_y + 1][p_x]
+            if test == '1':
+                heroS = heroSP
+                heroSPFlip()
+                p_y += 1
+            else:
+                heroS = 0
+        except IndexError:
             heroS = 0
     else:
         heroS = 0
@@ -256,12 +294,15 @@ def moveW():
     global heroSP
     heroD = 'W'
     if p_x > 0:
-        test = floor[p_y][p_x - 1]
-        if test == '1':
-            heroS = heroSP
-            heroSPFlip()
-            p_x += -1
-        else:
+        try:
+            test = floor[p_y][p_x - 1]
+            if test == '1':
+                heroS = heroSP
+                heroSPFlip()
+                p_x += -1
+            else:
+                heroS = 0
+        except IndexError:
             heroS = 0
     else:
         heroS = 0
@@ -272,40 +313,44 @@ def Act():
     ty, tx = [p_y, p_x]
     ty += dirCheck()[0]
     tx += dirCheck()[1]
-    test = floor[ty][tx]
-    if test == '2':
+    try:
+        test = floor[ty][tx]
+    except IndexError:
+        test = '0'
+    if test == '2' and ty >= 0 and tx >= 0:
         floor[ty][tx] = '3'
         create_map()
-        store(read_data(ty,tx))
-
-N = Button(root, width = 10, height = 4, text = 'North', command = moveN)
-N.grid(column = 7, row = 2, sticky = 's')
-
-E = Button(root, width = 10, height = 4, text = 'East', command = moveE)
-E.grid(column = 8, row = 3, sticky = 'w')
-
-S = Button(root, width = 10, height = 4, text = 'South', command = moveS)
-S.grid(column = 7, row = 4, sticky = 'n')
-
-W = Button(root, width = 10, height = 4, text = 'West', command = moveW)
-W.grid(column = 6, row = 3, sticky = 'e')
-
-A = Button(root, width = 10, height = 4, text = 'Act', command = Act)
-A.grid(column = 7, row = 3)
-field.bind('<Return>', Act)
+        if read_data(ty,tx) != ('error','error'):
+            store(read_data(ty,tx))
 
 def key_pressed(event):
     k = event.char
     if k == 'w':
-        moveN()
+        if menu:
+            mUp()
+        else:
+            moveN()
     if k == 'a':
-        moveW()
+        if not menu:
+            moveW()
     if k == 's':
-        moveS()
+        if menu:
+            mDown()
+        else:
+            moveS()
     if k == 'd':
-        moveE()
+        if not menu:
+            moveE()
+    if k == 'j':
+        if menu:
+            mSel()
+        else:
+            Act()
+    if k == 'k':
+        menu_mode()
+    field.after(50)
 field.bind('<Key>', key_pressed)
 
 ## WHATEVER ############################
-
+field.focus_force()
 root.mainloop()
