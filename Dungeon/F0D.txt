@@ -1,2 +1,2 @@
-0 1 1 Potion
-1 1 1 Thingamajig
+1 8 1 Sword
+8 1 1 1

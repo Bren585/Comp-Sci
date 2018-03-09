@@ -1,0 +1,3 @@
+Potion heal(1)
+Sword equip('Sword')
+Heart gain(1)
