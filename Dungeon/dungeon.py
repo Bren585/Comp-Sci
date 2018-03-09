@@ -44,7 +44,7 @@ def dirCheck():
     if heroD == 'W':
         return [0,-1]
 
-p_x, p_y = 0,0
+p_x, p_y = 1,1
 
 def read_floor(new = False):
     global floor
@@ -220,7 +220,7 @@ def engage(ID):
     hearts -= e[ID][1]
     e[ID][0] -= (atk+int(mt))
     if e[ID][0] <= 0:
-        floor[e[ID][2]][e[ID][3]] = '1'
+        floor[e[ID][3]][e[ID][2]] = '1'
         e.pop(ID)
     dur = str(int(dur)-1)
     if dur <= 0:
@@ -499,6 +499,9 @@ def Act():
         test = floor[ty][tx]
     except IndexError:
         test = '0'
+    if test == '1':
+        exec effect
+        brk()
     if test == '2' and ty >= 0 and tx >= 0:
         floor[ty][tx] = '3'
         if read_data(ty,tx) != ('error','error'):
